@@ -1,0 +1,32 @@
+{
+  "name": "aleph",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "concurrently \"cross-env BROWSER=none snowpack dev\" \"wait-on http://localhost:8080 && electron .\"",
+    "build": "snowpack build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/a-l-e-p-h/aleph.git"
+  },
+  "author": "agohorel",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/a-l-e-p-h/aleph/issues"
+  },
+  "homepage": "https://github.com/a-l-e-p-h/aleph#readme",
+  "devDependencies": {
+    "concurrently": "^6.0.0",
+    "cross-env": "^7.0.3",
+    "electron": "^11.3.0",
+    "electron-is-dev": "^1.2.0",
+    "snowpack": "^3.0.13",
+    "wait-on": "^5.2.1"
+  },
+  "dependencies": {
+    "lit-element": "^2.4.0"
+  }
+}
