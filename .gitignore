@@ -1,3 +1,6 @@
+# snowpack output
+build
+
 # Logs
 logs
 *.log

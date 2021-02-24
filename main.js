@@ -13,7 +13,7 @@ function createWindow() {
 
   const startURL = isDev
     ? "http://localhost:8080"
-    : `file://${path.join(__dirname, "index.html")}`;
+    : `file://${path.join(__dirname, "build/index.html")}`;
 
   win.loadURL(startURL);
 }

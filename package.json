@@ -1,12 +1,27 @@
 {
   "name": "aleph",
   "version": "1.0.0",
-  "description": "",
+  "description": "a framework for developing and performing audio reactive visualizations",
   "main": "main.js",
+  "homepage": "https://github.com/a-l-e-p-h/aleph#readme",
   "scripts": {
     "start": "electron .",
-    "dev": "concurrently \"cross-env BROWSER=none snowpack dev\" \"wait-on http://localhost:8080 && electron .\"",
-    "build": "snowpack build"
+    "dev": "concurrently \"cross-env snowpack dev --open none\" \"wait-on http://localhost:8080 && electron .\"",
+    "build": "snowpack build",
+    "package": "snowpack build && electron-builder"
+  },
+  "build": {
+    "appId": "com.electron.aleph",
+    "productName": "aleph",
+    "asar": false,
+    "files": [
+      "build/**/*",
+      "node_modules/**/*",
+      "main.js"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    }
   },
   "repository": {
     "type": "git",
@@ -17,16 +32,16 @@
   "bugs": {
     "url": "https://github.com/a-l-e-p-h/aleph/issues"
   },
-  "homepage": "https://github.com/a-l-e-p-h/aleph#readme",
   "devDependencies": {
     "concurrently": "^6.0.0",
     "cross-env": "^7.0.3",
     "electron": "^11.3.0",
-    "electron-is-dev": "^1.2.0",
+    "electron-builder": "^22.9.1",
     "snowpack": "^3.0.13",
     "wait-on": "^5.2.1"
   },
   "dependencies": {
+    "electron-is-dev": "^1.2.0",
     "lit-element": "^2.4.0"
   }
 }
