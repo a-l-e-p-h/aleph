@@ -31,7 +31,7 @@ const buttonStyles = css`
 
   button:focus {
     outline: none;
-    border: 1px solid ${theme.colors.white};
+    border: 1px solid ${theme.colors.blue};
   }
 
   button[disabled] {
