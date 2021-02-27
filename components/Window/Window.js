@@ -60,6 +60,10 @@ class Window extends LitElement {
               type="maximize"
               @click=${this.maximimze}
             ></aleph-window-button>
+            <aleph-window-button
+              type="close"
+              @click=${this.maximimze}
+            ></aleph-window-button>
           </div>
         </div>
         ${this.isMaximized

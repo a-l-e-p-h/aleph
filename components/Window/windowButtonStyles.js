@@ -21,6 +21,19 @@ const windowButtonStyles = css`
     cursor: pointer;
   }
 
+  .button:hover .minimize {
+    border-bottom: 2px solid ${theme.colors.orange};
+  }
+
+  .button:hover .maximize {
+    border: 2px solid ${theme.colors.blue};
+  }
+
+  .button:hover .close,
+  .button:hover .close:after {
+    background-color: ${theme.colors.red};
+  }
+
   .minimize {
     background-color: transparent;
     border-bottom: 2px solid ${theme.colors.white};
