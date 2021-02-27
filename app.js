@@ -2,6 +2,7 @@ import { LitElement, html } from "lit-element";
 
 import "./components/Button/Button";
 import "./components/Window/Window";
+import "./components/Input/Input";
 
 class App extends LitElement {
   constructor() {
@@ -28,6 +29,7 @@ class App extends LitElement {
           @click="${this.childClickHandler}"
           .isDisabled="${true}"
         ></aleph-button>
+        <aleph-input placeholder="hello world"></aleph-input>
       </aleph-window>
     `;
   }
