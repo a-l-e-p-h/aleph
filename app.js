@@ -3,6 +3,7 @@ import { LitElement, html } from "lit-element";
 import "./components/Button/Button";
 import "./components/Window/Window";
 import "./components/Input/Input";
+import "./components/Checkbox/Checkbox";
 
 class App extends LitElement {
   constructor() {
@@ -30,6 +31,7 @@ class App extends LitElement {
           .isDisabled="${true}"
         ></aleph-button>
         <aleph-input placeholder="hello world"></aleph-input>
+        <aleph-checkbox label="die instantly?"></aleph-checkbox>
       </aleph-window>
     `;
   }
