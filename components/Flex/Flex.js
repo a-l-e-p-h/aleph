@@ -1,4 +1,4 @@
-import { LitElement, html, css } from "lit-element";
+import { LitElement, html } from "lit-element";
 import { styleMap } from "lit-html/directives/style-map";
 
 class Flex extends LitElement {
@@ -9,14 +9,6 @@ class Flex extends LitElement {
       justify: { type: String },
       display: { type: String },
     };
-  }
-
-  static get styles() {
-    return css`
-      div {
-        display: inline-flex;
-      }
-    `;
   }
 
   constructor() {
@@ -30,6 +22,7 @@ class Flex extends LitElement {
   render() {
     return html`
       <div
+        class="flex"
         style=${styleMap({
           display: this.display,
           flexDirection: this.direction,

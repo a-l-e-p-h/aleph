@@ -4,6 +4,7 @@ import "./components/Button/Button";
 import "./components/Window/Window";
 import "./components/Input/Input";
 import "./components/Checkbox/Checkbox";
+import "./components/Control/Fader/Fader";
 
 class App extends LitElement {
   constructor() {
@@ -32,6 +33,7 @@ class App extends LitElement {
         ></aleph-button>
         <aleph-input placeholder="hello world"></aleph-input>
         <aleph-checkbox label="die instantly?"></aleph-checkbox>
+        <aleph-fader index="0"></aleph-fader>
       </aleph-window>
     `;
   }
