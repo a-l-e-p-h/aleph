@@ -13,9 +13,9 @@ class Knob extends Control {
   constructor() {
     super();
     this.type = "knob";
-    this.strokeWidth = 10;
-    this.height = 100;
-    this.width = 100;
+    this.strokeWidth = 9;
+    this.height = 85;
+    this.width = 85;
     this.value = 127;
     this.label = this.createLabelText(this.type, this.index);
   }
@@ -39,7 +39,7 @@ class Knob extends Control {
 
   render() {
     return html`
-      <aleph-flex align="center" direction="column">
+      <aleph-flex align="center" direction="column" display="inline-flex">
         <label for="knob">${this.label}</label>
         <input
           id="knob"
