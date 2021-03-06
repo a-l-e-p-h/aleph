@@ -39,7 +39,12 @@ class App extends LitElement {
         <aleph-fader index="0"></aleph-fader>
         <aleph-knob index="0"></aleph-knob>
         <aleph-ctrl-button index="0"></aleph-ctrl-button>
-        <aleph-sketch sketchName="helloworld"></aleph-sketch>
+        <aleph-flex>
+          <aleph-sketch sketchName="hello world testing really long sketch names"></aleph-sketch>
+          <aleph-sketch sketchName="hello world testing really long sketch names"></aleph-sketch>
+          <aleph-sketch sketchName="hello world testing really long sketch names"></aleph-sketch>
+          <aleph-sketch sketchName="hello world testing really long sketch names"></aleph-sketch>
+        </aleph-flex>
       </aleph-window>
     `;
   }

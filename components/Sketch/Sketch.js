@@ -21,14 +21,6 @@ class Sketch extends LitElement {
     this.sketchName = "";
   }
 
-  play() {
-    this.isPlaying = true;
-  }
-
-  stop() {
-    this.isPlaying = false;
-  }
-
   togglePlay() {
     this.isPlaying = !this.isPlaying;
   }

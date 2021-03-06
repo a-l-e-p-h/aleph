@@ -20,10 +20,15 @@ const sketchStyles = css`
   .sketch-button {
     ${baseButtonStyles}
     padding: 7px;
+    width: 220px;
   }
 
   .sketch-button p {
     margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 85%;
   }
 
   .sketch-button:hover {
