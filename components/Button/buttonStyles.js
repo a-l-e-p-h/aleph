@@ -2,18 +2,22 @@ import { css } from "lit-element";
 
 import theme from "../../globalStyles/theme";
 
+export const baseButtonStyles = css`
+  font-family: Roboto Mono;
+  font-size: 12px;
+  color: ${theme.colors.lightGrey};
+  border: 1px solid ${theme.colors.midGrey};
+  background: ${theme.colors.black};
+  padding: 5px 7px;
+  border-radius: ${theme.measurements.borderRadius};
+  transition: 100ms ease-out border, 200ms ease-out box-shadow;
+  box-shadow: 0px 0px 0px ${theme.colors.midGrey};
+  user-select: none;
+`;
+
 const buttonStyles = css`
   button {
-    font-family: Roboto Mono;
-    font-size: 12px;
-    color: ${theme.colors.lightGrey};
-    border: 1px solid ${theme.colors.midGrey};
-    background: ${theme.colors.black};
-    padding: 5px 7px;
-    border-radius: ${theme.measurements.borderRadius};
-    transition: 100ms ease-out border, 200ms ease-out box-shadow;
-    box-shadow: 0px 0px 0px ${theme.colors.midGrey};
-    user-select: none;
+    ${baseButtonStyles}
   }
 
   button:hover {

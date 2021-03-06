@@ -7,6 +7,7 @@ import "./components/Checkbox/Checkbox";
 import "./components/Control/Fader/Fader";
 import "./components/Control/Knob/Knob";
 import "./components/Control/Button/Button";
+import "./components/Sketch/Sketch";
 
 class App extends LitElement {
   constructor() {
@@ -38,6 +39,7 @@ class App extends LitElement {
         <aleph-fader index="0"></aleph-fader>
         <aleph-knob index="0"></aleph-knob>
         <aleph-ctrl-button index="0"></aleph-ctrl-button>
+        <aleph-sketch sketchName="helloworld"></aleph-sketch>
       </aleph-window>
     `;
   }
