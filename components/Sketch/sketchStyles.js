@@ -28,7 +28,7 @@ const sketchStyles = css`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 85%;
+    max-width: 80%;
   }
 
   .sketch-button:hover {
