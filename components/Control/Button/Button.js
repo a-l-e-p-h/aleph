@@ -19,7 +19,7 @@ class Button extends Control {
   constructor() {
     super();
     this.type = "button";
-    this.toggleMode = false;
+    this.toggleMode = true;
     this.value = 0;
     this.activationCount = 0;
     this.label = this.createLabelText(this.type, this.index);

@@ -13,6 +13,10 @@ const buttonStyles = css`
     border-radius: ${theme.measurements.borderRadius};
   }
 
+  .button-container:hover {
+    cursor: pointer;
+  }
+
   .button-value {
     width: 35px;
     height: 35px;
