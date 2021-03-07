@@ -8,6 +8,9 @@ import "./components/Control/Fader/Fader";
 import "./components/Control/Knob/Knob";
 import "./components/Control/Button/Button";
 import "./components/Sketch/Sketch";
+import "./components/Dropdown/Dropdown";
+
+const items = ["a", "b", "c"]
 
 class App extends LitElement {
   constructor() {
@@ -45,6 +48,8 @@ class App extends LitElement {
           <aleph-sketch sketchName="hello world testing really long sketch names"></aleph-sketch>
           <aleph-sketch sketchName="hello world testing really long sketch names"></aleph-sketch>
         </aleph-flex>
+
+        <aleph-dropdown .items=${items}></aleph-dropdown>
       </aleph-window>
     `;
   }
