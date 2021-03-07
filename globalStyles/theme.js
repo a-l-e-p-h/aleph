@@ -12,6 +12,18 @@ const black = css`#060b0d`;
 
 const borderRadius = css`4px`;
 
+const scrollBar = css`
+  ::-webkit-scrollbar {
+    width: 10px;
+    background-color: ${black};
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: ${darkGrey};
+    outline: none;
+  }
+`;
+
 const vertical = css`linear-gradient(
     180deg,
     #12e4a6 0%,
@@ -44,6 +56,9 @@ const theme = {
   },
   measurements: {
     borderRadius,
+  },
+  components: {
+    scrollBar,
   },
 };
 
