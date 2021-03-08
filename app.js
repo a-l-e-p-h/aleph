@@ -10,11 +10,22 @@ import "./components/Control/Button/Button";
 import "./components/Sketch/Sketch";
 import "./components/Dropdown/Dropdown";
 
-const items = ["a", "b", "c"]
-
 class App extends LitElement {
+  static get properties() {
+    return {
+      audioDevices: { type: Array },
+    };
+  }
+
   constructor() {
     super();
+    this.audioDevices = [];
+  }
+
+  async connectedCallback() {
+    super.connectedCallback();
+    const audioDevices = await import("./audio");
+    this.audioDevices = audioDevices.default;
   }
 
   render() {
@@ -43,13 +54,24 @@ class App extends LitElement {
         <aleph-knob index="0"></aleph-knob>
         <aleph-ctrl-button index="0"></aleph-ctrl-button>
         <aleph-flex>
-          <aleph-sketch sketchName="hello world testing really long sketch names"></aleph-sketch>
-          <aleph-sketch sketchName="hello world testing really long sketch names"></aleph-sketch>
-          <aleph-sketch sketchName="hello world testing really long sketch names"></aleph-sketch>
-          <aleph-sketch sketchName="hello world testing really long sketch names"></aleph-sketch>
+          <aleph-sketch
+            sketchName="hello world testing really long sketch names"
+          ></aleph-sketch>
+          <aleph-sketch
+            sketchName="hello world testing really long sketch names"
+          ></aleph-sketch>
+          <aleph-sketch
+            sketchName="hello world testing really long sketch names"
+          ></aleph-sketch>
+          <aleph-sketch
+            sketchName="hello world testing really long sketch names"
+          ></aleph-sketch>
         </aleph-flex>
 
-        <aleph-dropdown .items=${items}></aleph-dropdown>
+        <aleph-dropdown
+          placeholder="select an audio device"
+          .items=${this.audioDevices}
+        ></aleph-dropdown>
       </aleph-window>
     `;
   }

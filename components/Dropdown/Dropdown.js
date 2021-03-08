@@ -7,6 +7,7 @@ class Dropdown extends LitElement {
     return {
       items: { type: Array },
       selectedItem: { type: String },
+      placeholder: { type: String },
       isOpen: { type: Boolean },
     };
   }
@@ -20,6 +21,7 @@ class Dropdown extends LitElement {
     this.items = [];
     this.selectedItem = null;
     this.isOpen = false;
+    this.placeholder = "";
   }
 
   toggleDropdown() {
@@ -31,16 +33,11 @@ class Dropdown extends LitElement {
     this.isOpen = false;
   }
 
-  connectedCallback() {
-    super.connectedCallback();
-    this.selectedItem = this.items[0];
-  }
-
   render() {
     return html`
       <div class="dropdown-container">
         <div class="header" @click=${this.toggleDropdown}>
-          <p class="selection">${this.selectedItem}</p>
+          <p class="selection">${this.selectedItem || this.placeholder}</p>
           <div class="${this.isOpen ? "arrow arrow-open" : "arrow"}"></div>
         </div>
         <div
@@ -50,7 +47,9 @@ class Dropdown extends LitElement {
         >
           ${this.items.map(
             (item) =>
-              html`<p @click=${this.setSelectedItem} class="option">${item}</p>`
+              html`<p @click=${this.setSelectedItem} class="option">
+                ${item.text}
+              </p>`
           )}
         </div>
       </div>
