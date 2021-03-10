@@ -28,6 +28,13 @@ class App extends LitElement {
     this.audioDevices = audioDevices.default;
   }
 
+  audioDeviceCallback(deviceIndex) {
+    const audioDeviceSelected = new CustomEvent("audioDeviceSelected", {
+      detail: deviceIndex,
+    });
+    document.dispatchEvent(audioDeviceSelected);
+  }
+
   render() {
     return html`
       <aleph-window title="window">
@@ -71,9 +78,11 @@ class App extends LitElement {
         <aleph-dropdown
           placeholder="select an audio device"
           .items=${this.audioDevices}
+          .callback=${this.audioDeviceCallback}
         ></aleph-dropdown>
       </aleph-window>
     `;
   }
 }
+
 customElements.define("aleph-app", App);

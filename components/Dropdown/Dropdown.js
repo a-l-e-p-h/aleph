@@ -6,7 +6,7 @@ class Dropdown extends LitElement {
   static get properties() {
     return {
       items: { type: Array },
-      selectedItem: { type: String },
+      selectedItem: { type: Object },
       placeholder: { type: String },
       isOpen: { type: Boolean },
     };
@@ -22,6 +22,7 @@ class Dropdown extends LitElement {
     this.selectedItem = null;
     this.isOpen = false;
     this.placeholder = "";
+    this.callback = () => {};
   }
 
   toggleDropdown() {
@@ -29,15 +30,19 @@ class Dropdown extends LitElement {
   }
 
   setSelectedItem(e) {
-    this.selectedItem = e.target.textContent;
+    const selection = e.target.textContent.replace(/  |\r\n|\n|\r/gm, ""); // strip whitespace
+    this.selectedItem = this.items.filter((item) => item.text === selection)[0];
     this.isOpen = false;
+    this.callback(this.selectedItem?.key);
   }
 
   render() {
     return html`
       <div class="dropdown-container">
         <div class="header" @click=${this.toggleDropdown}>
-          <p class="selection">${this.selectedItem || this.placeholder}</p>
+          <p class="selection">
+            ${this.selectedItem?.text || this.placeholder}
+          </p>
           <div class="${this.isOpen ? "arrow arrow-open" : "arrow"}"></div>
         </div>
         <div
