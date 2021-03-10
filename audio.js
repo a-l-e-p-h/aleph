@@ -36,7 +36,21 @@ const audioAnalysis = (s) => {
 
   s.analyze = () => {
     const spectrum = fft.analyze();
-    console.log(spectrum);
+    const waveform = fft.waveform();
+    const bass = fft.getEnergy("bass");
+    const mid = fft.getEnergy("mid");
+    const high = fft.getEnergy("treble");
+    const spectralCentroid = fft.getCentroid();
+
+    const audio = {
+      spectrum,
+      waveform,
+      bass,
+      mid,
+      high,
+      spectralCentroid,
+    };
+    console.log(audio);
   };
 
   s.draw = () => {
