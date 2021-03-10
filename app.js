@@ -10,29 +10,11 @@ import "./components/Control/Button/Button";
 import "./components/Sketch/Sketch";
 import "./components/Dropdown/Dropdown";
 
-class App extends LitElement {
-  static get properties() {
-    return {
-      audioDevices: { type: Array },
-    };
-  }
+import "./views/AudioSettings/AudioSettings";
 
+class App extends LitElement {
   constructor() {
     super();
-    this.audioDevices = [];
-  }
-
-  async connectedCallback() {
-    super.connectedCallback();
-    const audioDevices = await import("./audio");
-    this.audioDevices = audioDevices.default;
-  }
-
-  audioDeviceCallback(deviceIndex) {
-    const audioDeviceSelected = new CustomEvent("audioDeviceSelected", {
-      detail: deviceIndex,
-    });
-    document.dispatchEvent(audioDeviceSelected);
   }
 
   render() {
@@ -74,13 +56,8 @@ class App extends LitElement {
             sketchName="hello world testing really long sketch names"
           ></aleph-sketch>
         </aleph-flex>
-
-        <aleph-dropdown
-          placeholder="select an audio device"
-          .items=${this.audioDevices}
-          .callback=${this.audioDeviceCallback}
-        ></aleph-dropdown>
       </aleph-window>
+      <audio-settings></audio-settings>
     `;
   }
 }
