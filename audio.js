@@ -1,3 +1,6 @@
+// import { ipcRenderer as ipc } from "electron"; // not working for some reason?
+const { ipcRenderer } = require("electron");
+
 const audioDevices = [];
 
 const audioAnalysis = (s) => {
@@ -50,7 +53,7 @@ const audioAnalysis = (s) => {
       high,
       spectralCentroid,
     };
-    console.log(audio);
+    ipcRenderer.send("audio-features", audio);
   };
 
   s.draw = () => {
