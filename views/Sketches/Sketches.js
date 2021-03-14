@@ -9,12 +9,14 @@ class SketchWindow extends LitElement {
   static get properties() {
     return {
       sketches: { type: Array },
+      selectedSketch: { type: String },
     };
   }
 
   constructor() {
     super();
     this.sketches = [];
+    this.selectedSketch = null;
   }
 
   connectedCallback() {
@@ -27,12 +29,21 @@ class SketchWindow extends LitElement {
     });
   }
 
+  setSelectedSketch(sketchName) {
+    this.selectedSketch = sketchName;
+  }
+
   render() {
     return html`
       <aleph-window title="sketches">
         <aleph-flex>
           ${this.sketches.map(
-            (sketch) => html`<aleph-sketch sketchName=${sketch}></aleph-sketch>`
+            (sketch) =>
+              html`<aleph-sketch
+                sketchName=${sketch}
+                .isPlaying=${sketch === this.selectedSketch}
+                @click=${() => this.setSelectedSketch(sketch)}
+              ></aleph-sketch>`
           )}
         </aleph-flex>
       </aleph-window>
