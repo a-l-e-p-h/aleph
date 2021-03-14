@@ -5,7 +5,7 @@ const loadSketches = require("./utils/loadSketches");
 
 let editorWindow, displayWindow;
 
-function createWindow() {
+async function createWindow() {
   editorWindow = new BrowserWindow({
     width: 800,
     height: 600,
@@ -21,15 +21,12 @@ function createWindow() {
   editorWindow.loadURL(startURL);
 }
 
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
   const sketches = loadSketches();
-  createWindow();
-  // createDisplayWindow();
+  await createWindow();
+  await createDisplayWindow();
 
-  setTimeout(() => {
-    console.log("attempting to send sketches to display window...");
-    editorWindow.webContents.send("sketch-list", sketches);
-  }, 2000);
+  editorWindow.webContents.send("sketch-list", sketches);
 });
 
 app.on("window-all-closed", () => {
@@ -44,7 +41,7 @@ app.on("activate", () => {
   }
 });
 
-function createDisplayWindow() {
+async function createDisplayWindow() {
   displayWindow = new BrowserWindow({
     width: 800,
     height: 600,
