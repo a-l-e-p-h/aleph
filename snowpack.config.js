@@ -13,7 +13,7 @@ module.exports = {
     polyfillNode: true,
   },
   devOptions: {
-    /* ... */
+    output: "stream",
   },
   buildOptions: {
     /* ... */
