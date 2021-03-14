@@ -1,6 +1,7 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
 const isDev = require("electron-is-dev");
 const path = require("path");
+const loadSketches = require("./utils/loadSketches");
 
 let editorWindow, displayWindow;
 
@@ -21,8 +22,14 @@ function createWindow() {
 }
 
 app.whenReady().then(() => {
+  const sketches = loadSketches();
   createWindow();
-  createDisplayWindow();
+  // createDisplayWindow();
+
+  setTimeout(() => {
+    console.log("attempting to send sketches to display window...");
+    editorWindow.webContents.send("sketch-list", sketches);
+  }, 2000);
 });
 
 app.on("window-all-closed", () => {
@@ -54,5 +61,7 @@ function createDisplayWindow() {
 }
 
 ipcMain.on("audio-features", (event, audioFeatures) => {
-  displayWindow.webContents.send("audio-features", audioFeatures);
+  if (displayWindow) {
+    displayWindow.webContents.send("audio-features", audioFeatures);
+  }
 });

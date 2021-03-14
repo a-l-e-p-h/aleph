@@ -37,4 +37,5 @@ const sketch = (s) => {
   };
 };
 
-new p5(sketch);
+new p5(sketch, document.getElementById("p5_1"));
+new p5(sketch, document.getElementById("p5_2"));

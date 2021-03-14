@@ -11,6 +11,7 @@ import "./components/Sketch/Sketch";
 import "./components/Dropdown/Dropdown";
 
 import "./views/AudioSettings/AudioSettings";
+import "./views/Sketches/Sketches";
 
 class App extends LitElement {
   constructor() {
@@ -58,6 +59,7 @@ class App extends LitElement {
         </aleph-flex>
       </aleph-window>
       <audio-settings></audio-settings>
+      <sketch-window></sketch-window>
     `;
   }
 }
