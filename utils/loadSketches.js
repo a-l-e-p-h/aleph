@@ -1,16 +1,15 @@
-const fs = require("fs");
+const fs = require("fs").promises;
 const path = require("path");
 
-const loadSketches = () => {
-  const sketches = [];
-  fs.readdir(path.resolve(__dirname, "../sketches"), (err, files) => {
-    if (err) {
-      console.error(err);
-    } else {
-      files.forEach((file) => sketches.push(file));
-    }
-  });
-  return sketches;
+const loadSketches = async () => {
+  try {
+    const fileNames = await fs.readdir(path.resolve(__dirname, "../sketches"));
+    return fileNames.map((fileName) =>
+      path.resolve(__dirname, "../sketches", fileName)
+    );
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 module.exports = loadSketches;

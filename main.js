@@ -22,11 +22,11 @@ async function createWindow() {
 }
 
 app.whenReady().then(async () => {
-  const sketches = loadSketches();
+  const sketches = await loadSketches();
   await createWindow();
   await createDisplayWindow();
 
-  editorWindow.webContents.send("sketch-list", sketches);
+  await editorWindow.webContents.send("sketch-list", Object.keys(sketches));
 });
 
 app.on("window-all-closed", () => {
@@ -60,5 +60,21 @@ async function createDisplayWindow() {
 ipcMain.on("audio-features", (event, audioFeatures) => {
   if (displayWindow) {
     displayWindow.webContents.send("audio-features", audioFeatures);
+  }
+});
+
+ipcMain.on("sketch-changed", (event, sketchName) => {
+  if (displayWindow) {
+    console.log(sketchName);
+    displayWindow.webContents.send("sketch-changed", sketchName);
+  }
+});
+
+ipcMain.on("request-sketches", async () => {
+  console.log("received request for sketch paths...");
+  if (displayWindow) {
+    const sketches = await loadSketches();
+    console.log(sketches);
+    displayWindow.webContents.send("sketch-list", sketches);
   }
 });

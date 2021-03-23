@@ -31,6 +31,8 @@ class SketchWindow extends LitElement {
 
   setSelectedSketch(sketchName) {
     this.selectedSketch = sketchName;
+
+    ipcRenderer.send("sketch-changed", this.selectedSketch);
   }
 
   render() {
