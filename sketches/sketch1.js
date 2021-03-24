@@ -1,4 +1,6 @@
 const sketch1 = (s, audio) => {
+  s.rectMode(s.CENTER);
+  s.blendMode(s.DIFFERENCE);
   const colorIntensity = s.map(audio.spectralCentroid, 0, 20000, 0, 255);
   s.background(0, colorIntensity * 2);
   s.fill(50, 0, colorIntensity);

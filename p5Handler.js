@@ -8,22 +8,19 @@ const sketch = (s) => {
 
   s.setup = () => {
     s.createCanvas(s.windowWidth, s.windowHeight);
-    s.rectMode(s.CENTER);
 
     ipcRenderer.on("audio-features", (event, audioFeatures) => {
       audio = audioFeatures;
     });
 
     ipcRenderer.on("sketch-changed", (event, sketchName) => {
-      console.log("selected", sketchName);
       currentSketch = sketches[sketchName];
+      s.resetStyles();
     });
 
     ipcRenderer.send("request-sketches");
 
     ipcRenderer.once("sketch-list", (event, sketchList) => {
-      console.log("attempting to write sketch paths...");
-      console.log(sketchList);
       sketchList.forEach((sketch) => {
         const sketchName = path.basename(sketch);
         sketches[sketchName] = require(sketch);
@@ -35,6 +32,18 @@ const sketch = (s) => {
 
   s.draw = () => {
     currentSketch(s, audio);
+  };
+
+  s.resetStyles = () => {
+    s.clear();
+    s.colorMode(s.RGB);
+    s.stroke(0);
+    s.fill(255);
+    s.rectMode(s.CORNER);
+    s.ellipseMode(s.CENTER);
+    s.angleMode(s.RADIANS);
+    s.blendMode(s.BLEND);
+    s.imageMode(s.CORNER);
   };
 };
 
