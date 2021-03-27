@@ -1,8 +1,7 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
 const isDev = require("electron-is-dev");
 const path = require("path");
-const loadSketches = require("./utils/loadSketches");
-const stripFilePath = require("./utils/stripFilePath");
+const { loadSketches, stripFilePath } = require("./utils/nodeUtils");
 
 let editorWindow, displayWindow;
 

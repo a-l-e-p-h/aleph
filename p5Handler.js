@@ -25,8 +25,6 @@ const sketch = (s) => {
         const sketchName = path.basename(sketch);
         sketches[sketchName] = require(sketch);
       });
-
-      console.log(sketches);
     });
   };
 
