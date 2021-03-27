@@ -2,6 +2,7 @@ const { app, BrowserWindow, ipcMain } = require("electron");
 const isDev = require("electron-is-dev");
 const path = require("path");
 const loadSketches = require("./utils/loadSketches");
+const stripFilePath = require("./utils/stripFilePath");
 
 let editorWindow, displayWindow;
 
@@ -22,11 +23,8 @@ async function createWindow() {
 }
 
 app.whenReady().then(async () => {
-  const sketches = await loadSketches();
   await createWindow();
   await createDisplayWindow();
-
-  await editorWindow.webContents.send("sketch-list", Object.keys(sketches));
 });
 
 app.on("window-all-closed", () => {
@@ -65,16 +63,21 @@ ipcMain.on("audio-features", (event, audioFeatures) => {
 
 ipcMain.on("sketch-changed", (event, sketchName) => {
   if (displayWindow) {
-    console.log(sketchName);
     displayWindow.webContents.send("sketch-changed", sketchName);
   }
 });
 
 ipcMain.on("request-sketches", async () => {
-  console.log("received request for sketch paths...");
   if (displayWindow) {
     const sketches = await loadSketches();
-    console.log(sketches);
     displayWindow.webContents.send("sketch-list", sketches);
+  }
+
+  if (editorWindow) {
+    const sketches = await loadSketches();
+    editorWindow.webContents.send(
+      "sketch-list",
+      sketches.map((path) => stripFilePath(path))
+    );
   }
 });

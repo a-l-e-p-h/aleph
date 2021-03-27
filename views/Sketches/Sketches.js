@@ -21,11 +21,9 @@ class SketchWindow extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    this.sketches = JSON.parse(localStorage.getItem("sketches")) || [];
-
-    ipcRenderer.on("sketch-list", (event, sketchList) => {
+    ipcRenderer.send("request-sketches");
+    ipcRenderer.once("sketch-list", (event, sketchList) => {
       this.sketches = sketchList;
-      localStorage.setItem("sketches", JSON.stringify(sketchList));
     });
   }
 
