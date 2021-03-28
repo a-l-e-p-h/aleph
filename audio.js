@@ -26,15 +26,12 @@ const audioAnalysis = (s) => {
     fft = new p5.FFT();
     fft.setInput(input);
 
-    document.addEventListener(
-      "audioDeviceSelected",
-      ({ detail: deviceIndex }) => {
-        // kill any active and update source
-        input.stop();
-        input.setSource(deviceIndex);
-        input.start();
-      }
-    );
+    document.addEventListener("audioDeviceSelected", ({ detail: device }) => {
+      // kill any active and update source
+      input.stop();
+      input.setSource(device.index);
+      input.start();
+    });
 
     const requestAudioDeviceRefresh = new Event("requestAudioDeviceRefresh");
     document.dispatchEvent(requestAudioDeviceRefresh);
