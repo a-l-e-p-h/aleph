@@ -16,16 +16,22 @@ const sketch = (s) => {
 
     ipcRenderer.on("sketch-changed", (event, sketchName) => {
       currentSketch = sketches[sketchName];
+      localStorage.setItem("lastSketch", sketchName);
       s.resetStyles();
     });
 
     ipcRenderer.send("request-sketches");
 
     ipcRenderer.once("sketch-list", (event, sketchList) => {
+      // import sketches
       sketchList.forEach((sketch) => {
         const sketchName = path.basename(sketch);
         sketches[sketchName] = require(sketch);
       });
+
+      // check for prev. loaded sketch
+      const lastSketch = localStorage.getItem("lastSketch");
+      if (lastSketch) currentSketch = sketches[lastSketch];
     });
   };
 

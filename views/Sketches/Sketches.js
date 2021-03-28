@@ -22,14 +22,16 @@ class SketchWindow extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     ipcRenderer.send("request-sketches");
-    ipcRenderer.once("sketch-list", (event, sketchList) => {
-      this.sketches = sketchList;
-    });
+    ipcRenderer.once(
+      "sketch-list",
+      (e, sketches) => (this.sketches = sketches)
+    );
+    const lastSketch = localStorage.getItem("lastSketch");
+    if (lastSketch) this.selectedSketch = lastSketch;
   }
 
   setSelectedSketch(sketchName) {
     this.selectedSketch = sketchName;
-
     ipcRenderer.send("sketch-changed", this.selectedSketch);
   }
 
