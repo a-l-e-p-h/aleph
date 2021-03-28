@@ -2,12 +2,13 @@ const { ipcRenderer } = require("electron");
 const path = require("path");
 
 const sketch = (s) => {
+  let cnv;
   let audio = {};
   const sketches = {};
   let currentSketch = () => {};
 
   s.setup = () => {
-    s.createCanvas(s.windowWidth, s.windowHeight);
+    cnv = s.createCanvas(s.windowWidth, s.windowHeight);
 
     ipcRenderer.on("audio-features", (event, audioFeatures) => {
       audio = audioFeatures;
@@ -42,6 +43,17 @@ const sketch = (s) => {
     s.angleMode(s.RADIANS);
     s.blendMode(s.BLEND);
     s.imageMode(s.CORNER);
+  };
+
+  s.centerCanvas = () => {
+    const x = (s.windowWidth - s.width) / 2;
+    const y = (s.windowHeight - s.height) / 2;
+    cnv.position(x, y);
+  };
+
+  s.windowResized = () => {
+    s.resizeCanvas(s.windowWidth, s.windowHeight);
+    s.centerCanvas();
   };
 };
 
