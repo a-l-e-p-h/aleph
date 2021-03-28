@@ -33,7 +33,7 @@ class Dropdown extends LitElement {
     const selection = e.target.textContent.replace(/  |\r\n|\n|\r/gm, ""); // strip whitespace
     this.selectedItem = this.items.filter((item) => item.text === selection)[0];
     this.isOpen = false;
-    this.callback(this.selectedItem?.key);
+    this.callback(this.selectedItem?.key, this.selectedItem?.text);
   }
 
   render() {

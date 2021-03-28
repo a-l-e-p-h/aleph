@@ -19,13 +19,26 @@ class AudioSettings extends LitElement {
     super.connectedCallback();
     const audioDevices = await import("../../audio");
     this.audioDevices = audioDevices.default;
+
+    document.addEventListener("requestAudioDeviceRefresh", () => {
+      const lastDevice = JSON.parse(localStorage.getItem("lastAudioDevice"));
+      const audioDeviceSelected = new CustomEvent("audioDeviceSelected", {
+        detail: lastDevice.index,
+      });
+      // not sure what's up but without delaying this call the input won't be set in p5
+      setTimeout(() => document.dispatchEvent(audioDeviceSelected), 50);
+    });
   }
 
-  audioDeviceCallback(deviceIndex) {
+  audioDeviceCallback(deviceIndex, deviceName) {
     const audioDeviceSelected = new CustomEvent("audioDeviceSelected", {
       detail: deviceIndex,
     });
     document.dispatchEvent(audioDeviceSelected);
+    localStorage.setItem(
+      "lastAudioDevice",
+      JSON.stringify({ index: deviceIndex, text: deviceName })
+    );
   }
 
   render() {

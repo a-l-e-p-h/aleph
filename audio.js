@@ -35,6 +35,9 @@ const audioAnalysis = (s) => {
         input.start();
       }
     );
+
+    const requestAudioDeviceRefresh = new Event("requestAudioDeviceRefresh");
+    document.dispatchEvent(requestAudioDeviceRefresh);
   };
 
   s.analyze = () => {
