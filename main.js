@@ -1,7 +1,11 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
 const isDev = require("electron-is-dev");
 const path = require("path");
-const { loadSketches, stripFilePath } = require("./utils/nodeUtils");
+const {
+  loadSketches,
+  stripFilePath,
+  sendToWindow,
+} = require("./utils/nodeUtils");
 
 let editorWindow, displayWindow;
 
@@ -67,16 +71,11 @@ ipcMain.on("sketch-changed", (event, sketchName) => {
 });
 
 ipcMain.on("request-sketches", async () => {
-  if (displayWindow) {
-    const sketches = await loadSketches();
-    displayWindow.webContents.send("sketch-list", sketches);
-  }
-
-  if (editorWindow) {
-    const sketches = await loadSketches();
-    editorWindow.webContents.send(
-      "sketch-list",
-      sketches.map((path) => stripFilePath(path))
-    );
-  }
+  const sketches = await loadSketches();
+  sendToWindow(displayWindow, "sketch-list", sketches);
+  sendToWindow(
+    editorWindow,
+    "sketch-list",
+    sketches.map((path) => stripFilePath(path))
+  );
 });
