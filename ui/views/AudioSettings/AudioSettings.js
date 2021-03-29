@@ -19,7 +19,7 @@ class AudioSettings extends LitElement {
 
   async connectedCallback() {
     super.connectedCallback();
-    const audioDevices = await import("../../audio");
+    const audioDevices = await import("../../../audio");
     this.audioDevices = audioDevices.default;
 
     document.addEventListener("requestAudioDeviceRefresh", () => {

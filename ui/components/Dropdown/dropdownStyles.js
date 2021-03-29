@@ -1,7 +1,7 @@
 import { css } from "lit-element";
 
 import theme from "../../globalStyles/theme";
-import { hex2rgba } from "../../utils/browserUtils";
+import { hex2rgba } from "../../../utils/browserUtils";
 
 const dropdownStyles = css`
   .dropdown-container {

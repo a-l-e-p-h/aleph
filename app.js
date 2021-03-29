@@ -1,7 +1,7 @@
 import { LitElement, html } from "lit-element";
 
-import "./views/AudioSettings/AudioSettings";
-import "./views/Sketches/Sketches";
+import "./ui/views/AudioSettings/AudioSettings";
+import "./ui/views/Sketches/Sketches";
 
 class App extends LitElement {
   constructor() {

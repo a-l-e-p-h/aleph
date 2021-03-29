@@ -1,11 +1,8 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
 const isDev = require("electron-is-dev");
 const path = require("path");
-const {
-  loadSketches,
-  stripFilePath,
-  sendToWindow,
-} = require("./utils/nodeUtils");
+const utilsPath = isDev ? "./utils/nodeUtils" : "./build/utils/nodeUtils";
+const { loadSketches, stripFilePath, sendToWindow } = require(utilsPath);
 
 let editorWindow, displayWindow;
 
@@ -19,8 +16,10 @@ async function createWindow() {
   });
 
   const startURL = isDev
-    ? "http://localhost:8080"
+    ? "http://localhost:8080/index.html"
     : `file://${path.join(__dirname, "build/index.html")}`;
+
+  console.log(startURL);
 
   editorWindow.loadURL(startURL);
 }
@@ -52,8 +51,8 @@ async function createDisplayWindow() {
   });
 
   const startURL = isDev
-    ? "http://localhost:8080/displayWindow.html"
-    : `file://${path.join(__dirname, "build/displayWindow.html")}`;
+    ? "http://localhost:8080/display/displayWindow.html"
+    : `file://${path.join(__dirname, "build/display/displayWindow.html")}`;
 
   displayWindow.loadURL(startURL);
 }

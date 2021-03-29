@@ -2,7 +2,7 @@ import { css } from "lit-element";
 
 import theme from "../../globalStyles/theme";
 import { baseButtonStyles } from "../Button/buttonStyles";
-import { hex2rgba } from "../../utils/browserUtils";
+import { hex2rgba } from "../../../utils/browserUtils";
 
 const playStyles = css`
   width: 0;
