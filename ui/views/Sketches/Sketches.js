@@ -50,7 +50,7 @@ class SketchWindow extends LitElement {
       });
     });
 
-    this.layers.forEach((layer, idx) => {
+    this.layers.forEach((_, idx) => {
       const lastSketch = localStorage.getItem(`lastSketch${idx}`);
       if (lastSketch) this.layers[idx].selectedSketch = lastSketch;
     });
@@ -58,7 +58,7 @@ class SketchWindow extends LitElement {
 
   setSelectedSketch(sketchName, layerIndex) {
     this.layers[layerIndex].selectedSketch = sketchName;
-    console.log(this.layers);
+    this.layers = [...this.layers];
     ipcRenderer.send("sketch-changed", JSON.stringify(this.layers));
   }
 
