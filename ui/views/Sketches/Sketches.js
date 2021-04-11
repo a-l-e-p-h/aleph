@@ -54,8 +54,11 @@ class SketchWindow extends LitElement {
     });
 
     this.layers.forEach((_, idx) => {
-      const lastSketch = localStorage.getItem(`lastSketch${idx}`);
-      if (lastSketch) this.layers[idx].selectedSketch = lastSketch;
+      const lastSketch = JSON.parse(localStorage.getItem(`lastSketch${idx}`));
+      if (lastSketch) {
+        this.layers[idx].selectedSketch = lastSketch.sketch;
+        this.layers[idx].isPlaying = lastSketch.isPlaying;
+      }
     });
   }
 
@@ -75,6 +78,10 @@ class SketchWindow extends LitElement {
     ipcRenderer.send("sketch-changed", JSON.stringify(this.layers));
   }
 
+  isSketchPlaying(sketch, layer) {
+    return sketch === layer.selectedSketch && layer.isPlaying ? true : false;
+  }
+
   render() {
     return html`
       <aleph-window title="sketches">
@@ -89,7 +96,7 @@ class SketchWindow extends LitElement {
                   (sketch) => html`
                     <aleph-sketch
                       sketchName=${sketch}
-                      .isPlaying=${sketch === layer.selectedSketch}
+                      .isPlaying=${this.isSketchPlaying(sketch, layer)}
                       @click=${() =>
                         this.setSelectedSketch(sketch, layer.index)}
                     ></aleph-sketch>

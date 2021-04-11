@@ -22,13 +22,23 @@ const p5Handler = (layerIndex) => {
         // if layer is paused, set current to default/empty sketch
         if (!layers[layerIndex].isPlaying) {
           currentSketch = s.defaultSketch;
+          localStorage.setItem(
+            `lastSketch${layerIndex}`,
+            JSON.stringify({
+              sketch: layers[layerIndex].selectedSketch,
+              isPlaying: false,
+            })
+          );
         }
         // only update if this layer has received a change
         else if (currentSketch !== newSketch) {
           currentSketch = newSketch;
           localStorage.setItem(
             `lastSketch${layerIndex}`,
-            layers[layerIndex].selectedSketch
+            JSON.stringify({
+              sketch: layers[layerIndex].selectedSketch,
+              isPlaying: true,
+            })
           );
           s.resetStyles();
         }
@@ -44,8 +54,12 @@ const p5Handler = (layerIndex) => {
         });
 
         // check for prev. loaded sketch
-        const lastSketch = localStorage.getItem(`lastSketch${layerIndex}`);
-        if (lastSketch) currentSketch = sketches[lastSketch];
+        const lastSketch = JSON.parse(
+          localStorage.getItem(`lastSketch${layerIndex}`)
+        );
+        if (lastSketch && lastSketch.isPlaying) {
+          currentSketch = sketches[lastSketch.sketch];
+        }
       });
     };
 
