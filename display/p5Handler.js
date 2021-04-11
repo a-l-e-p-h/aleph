@@ -18,8 +18,13 @@ const p5Handler = (layerIndex) => {
       ipcRenderer.on("sketch-changed", (event, serializedLayers) => {
         const layers = JSON.parse(serializedLayers);
         const newSketch = sketches[layers[layerIndex].selectedSketch];
+
+        // if layer is paused, set current to default/empty sketch
+        if (!layers[layerIndex].isPlaying) {
+          currentSketch = s.defaultSketch;
+        }
         // only update if this layer has received a change
-        if (currentSketch !== newSketch) {
+        else if (currentSketch !== newSketch) {
           currentSketch = newSketch;
           localStorage.setItem(
             `lastSketch${layerIndex}`,
@@ -58,6 +63,10 @@ const p5Handler = (layerIndex) => {
       s.angleMode(s.RADIANS);
       s.blendMode(s.BLEND);
       s.imageMode(s.CORNER);
+    };
+
+    s.defaultSketch = () => {
+      s.clear();
     };
 
     s.centerCanvas = () => {

@@ -24,16 +24,19 @@ class SketchWindow extends LitElement {
         index: 0,
         sketches: [],
         selectedSketch: null,
+        isPlaying: true,
       },
       {
         index: 1,
         sketches: [],
         selectedSketch: null,
+        isPlaying: true,
       },
       {
         index: 2,
         sketches: [],
         selectedSketch: null,
+        isPlaying: true,
       },
     ];
   }
@@ -57,7 +60,17 @@ class SketchWindow extends LitElement {
   }
 
   setSelectedSketch(sketchName, layerIndex) {
-    this.layers[layerIndex].selectedSketch = sketchName;
+    const layer = this.layers[layerIndex];
+    // if changing to a new sketch
+    if (layer.selectedSketch !== sketchName) {
+      layer.selectedSketch = sketchName;
+      layer.isPlaying = true;
+    }
+    // if toggling play state
+    else {
+      layer.isPlaying = !layer.isPlaying;
+    }
+    // update
     this.layers = [...this.layers];
     ipcRenderer.send("sketch-changed", JSON.stringify(this.layers));
   }
