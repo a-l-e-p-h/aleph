@@ -25,6 +25,11 @@ class SketchWindow extends LitElement {
         sketches: [],
         selectedSketch: null,
       },
+      {
+        index: 2,
+        sketches: [],
+        selectedSketch: null,
+      },
     ];
   }
 

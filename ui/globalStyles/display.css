@@ -7,14 +7,20 @@ body {
   padding: 0;
 }
 
-#p5_0,
-#p5_1 {
+#p5-0,
+#p5-1,
+#p5-2 {
   position: absolute;
   top: 0;
   left: 0;
 }
 
-#p5_1 {
-  opacity: 1;
+#p5-1 {
+  opacity: 0.5;
   mix-blend-mode: multiply;
+}
+
+#p5-2 {
+  opacity: 0.5;
+  mix-blend-mode: overlay;
 }
