@@ -1,6 +1,7 @@
 import { LitElement, html } from "lit-element";
 const { ipcRenderer } = require("electron");
 
+import SketchWindowStyles from "./SketchWindowStyles";
 import "../../components/Window/Window";
 import "../../components/Flex/Flex";
 import "../../components/Sketch/Sketch";
@@ -10,6 +11,10 @@ class SketchWindow extends LitElement {
     return {
       layers: { type: Array },
     };
+  }
+
+  static get styles() {
+    return SketchWindowStyles;
   }
 
   constructor() {
@@ -64,6 +69,9 @@ class SketchWindow extends LitElement {
           ${this.layers.map(
             (layer) => html`
               <aleph-flex direction="column">
+                <div class="layer-container">
+                  <h3>layer ${layer.index + 1}</h3>
+                </div>
                 ${layer.sketches.map(
                   (sketch) => html`
                     <aleph-sketch
