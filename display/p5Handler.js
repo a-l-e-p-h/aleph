@@ -17,12 +17,16 @@ const p5Handler = (layerIndex) => {
 
       ipcRenderer.on("sketch-changed", (event, serializedLayers) => {
         const layers = JSON.parse(serializedLayers);
-        currentSketch = sketches[layers[layerIndex].selectedSketch];
-        localStorage.setItem(
-          `lastSketch${layerIndex}`,
-          layers[layerIndex].selectedSketch
-        );
-        s.resetStyles();
+        const newSketch = sketches[layers[layerIndex].selectedSketch];
+        // only update if this layer has received a change
+        if (currentSketch !== newSketch) {
+          currentSketch = newSketch;
+          localStorage.setItem(
+            `lastSketch${layerIndex}`,
+            layers[layerIndex].selectedSketch
+          );
+          s.resetStyles();
+        }
       });
 
       ipcRenderer.send("request-sketches");
