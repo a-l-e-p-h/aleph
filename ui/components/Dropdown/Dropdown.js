@@ -9,6 +9,8 @@ class Dropdown extends LitElement {
       selectedItem: { type: Object },
       placeholder: { type: String },
       isOpen: { type: Boolean },
+      callback: { type: Function },
+      callbackArgs: { type: Array },
     };
   }
 
@@ -23,6 +25,7 @@ class Dropdown extends LitElement {
     this.isOpen = false;
     this.placeholder = "";
     this.callback = () => {};
+    this.callbackArgs = [];
   }
 
   toggleDropdown() {
@@ -33,7 +36,11 @@ class Dropdown extends LitElement {
     const selection = e.target.textContent.replace(/  |\r\n|\n|\r/gm, ""); // strip whitespace
     this.selectedItem = this.items.filter((item) => item.text === selection)[0];
     this.isOpen = false;
-    this.callback(this.selectedItem?.key, this.selectedItem?.text);
+    this.callback(
+      this.selectedItem?.key,
+      this.selectedItem?.text,
+      this.callbackArgs
+    );
   }
 
   render() {
