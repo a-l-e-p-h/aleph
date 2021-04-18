@@ -2,14 +2,17 @@ import { LitElement, html } from "lit-element";
 const { ipcRenderer } = require("electron");
 
 import SketchWindowStyles from "./SketchWindowStyles";
+import { mixBlendModes } from "./mixBlendModes";
 import "../../components/Window/Window";
 import "../../components/Flex/Flex";
 import "../../components/Sketch/Sketch";
+import "../../components/Dropdown/Dropdown";
 
 class SketchWindow extends LitElement {
   static get properties() {
     return {
       layers: { type: Array },
+      mixBlendModes: { type: Array },
     };
   }
 
@@ -19,24 +22,28 @@ class SketchWindow extends LitElement {
 
   constructor() {
     super();
+    this.mixBlendModes = mixBlendModes;
     this.layers = [
       {
         index: 0,
         sketches: [],
         selectedSketch: null,
         isPlaying: true,
+        blendMode: "normal",
       },
       {
         index: 1,
         sketches: [],
         selectedSketch: null,
         isPlaying: true,
+        blendMode: "normal",
       },
       {
         index: 2,
         sketches: [],
         selectedSketch: null,
         isPlaying: true,
+        blendMode: "normal",
       },
     ];
   }
@@ -60,6 +67,16 @@ class SketchWindow extends LitElement {
         this.layers[idx].isPlaying = lastSketch.isPlaying;
       }
     });
+
+    // build up blendMode array per-layer
+    this.mixBlendModes = this.layers.map((_, idx) => {
+      return mixBlendModes.map((blendMode) => {
+        return {
+          key: idx,
+          text: blendMode,
+        };
+      });
+    });
   }
 
   setSelectedSketch(sketchName, layerIndex) {
@@ -82,6 +99,18 @@ class SketchWindow extends LitElement {
     return sketch === layer.selectedSketch && layer.isPlaying ? true : false;
   }
 
+  updateBlendMode(layerIndex, blendMode, layers) {
+    // update layer
+    const layer = layers[layerIndex];
+    layer.blendMode = blendMode;
+    layers = [...layers];
+    // ipc to displayWindow
+    ipcRenderer.send(
+      "mix-blend-mode-updated",
+      JSON.stringify({ layer: layerIndex, blendMode })
+    );
+  }
+
   render() {
     return html`
       <aleph-window title="sketches">
@@ -91,6 +120,14 @@ class SketchWindow extends LitElement {
               <aleph-flex direction="column">
                 <div class="layer-container">
                   <h3>layer ${layer.index + 1}</h3>
+                  <aleph-dropdown
+                    .items=${this.mixBlendModes[layer.index]}
+                    .callback=${this.updateBlendMode}
+                    .callbackArgs=${this.layers}
+                    .selectedItem=${this.mixBlendModes[layer.index].find(
+                      (mode) => mode.text === layer.blendMode
+                    )}
+                  ></aleph-dropdown>
                 </div>
                 ${layer.sketches.map(
                   (sketch) => html`

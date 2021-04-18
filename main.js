@@ -78,3 +78,7 @@ ipcMain.on("request-sketches", async () => {
     sketches.map((path) => stripFilePath(path))
   );
 });
+
+ipcMain.on("mix-blend-mode-updated", (event, layers) => {
+  sendToWindow(displayWindow, "mix-blend-mode-updated", layers);
+});

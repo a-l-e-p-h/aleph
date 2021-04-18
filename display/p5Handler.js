@@ -61,6 +61,19 @@ const p5Handler = (layerIndex) => {
           currentSketch = sketches[lastSketch.sketch];
         }
       });
+
+      ipcRenderer.on(
+        "mix-blend-mode-updated",
+        (event, serializedBlendModeUpdate) => {
+          const blendModeUpdate = JSON.parse(serializedBlendModeUpdate);
+          if (blendModeUpdate.layer === layerIndex) {
+            // find target canvas
+            const canvas = document.getElementById(`p5-${layerIndex}`);
+            // update blend mode
+            canvas.style.mixBlendMode = blendModeUpdate.blendMode;
+          }
+        }
+      );
     };
 
     s.draw = () => {
@@ -97,12 +110,6 @@ const p5Handler = (layerIndex) => {
 
   return sketch;
 };
-
-// const layer1 = p5Handler(0);
-// const layer2 = p5Handler(1);
-
-// new p5(layer1, document.getElementById("p5-0"));
-// new p5(layer2, document.getElementById("p5-1"));
 
 const p5Layers = document.querySelectorAll(".p5-canvas");
 
