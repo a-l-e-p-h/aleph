@@ -7,7 +7,7 @@ const sketch2 = (s, audio) => {
     let width = s.windowWidth / audio.spectrum?.length;
     let x = width * i;
     let height = audio.waveform[i] * 1024;
-    s.stroke(255 - audio.waveform[i]);
+    s.stroke(255 - audio.waveform[i], 0, colorIntensity);
     s.rect(x, s.windowHeight * 0.5, width, height);
   }
   s.fill(255, colorIntensity);

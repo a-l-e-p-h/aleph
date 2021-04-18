@@ -137,21 +137,28 @@ class SketchWindow extends LitElement {
               <aleph-flex direction="column">
                 <div class="layer-container">
                   <h3>layer ${layer.index + 1}</h3>
-                  <aleph-dropdown
-                    .items=${this.mixBlendModes[layer.index]}
-                    .callback=${this.updateBlendMode}
-                    .callbackArgs=${this.layers}
-                    .selectedItem=${this.mixBlendModes[layer.index].find(
-                      (mode) => mode.text === layer.blendMode
-                    )}
-                  ></aleph-dropdown>
-                  <aleph-knob
-                    minValue=${0}
-                    maxValue=${100}
-                    value=${layer.opacity}
-                    .callback=${this.updateOpacity}
-                    .callbackArgs=${[this.layers, layer.index]}
-                  ></aleph-knob>
+                  <aleph-flex align="center">
+                    <aleph-dropdown
+                      label="blend mode"
+                      .items=${this.mixBlendModes[layer.index]}
+                      .callback=${this.updateBlendMode}
+                      .callbackArgs=${this.layers}
+                      .selectedItem=${this.mixBlendModes[layer.index].find(
+                        (mode) => mode.text === layer.blendMode
+                      )}
+                    ></aleph-dropdown>
+                    <aleph-knob
+                      label="opacity"
+                      .minValue=${0}
+                      .maxValue=${100}
+                      .width=${40}
+                      .height=${40}
+                      .strokeWidth=${6}
+                      value=${layer.opacity}
+                      .callback=${this.updateOpacity}
+                      .callbackArgs=${[this.layers, layer.index]}
+                    ></aleph-knob>
+                  </aleph-flex>
                 </div>
                 ${layer.sketches.map(
                   (sketch) => html`

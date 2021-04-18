@@ -1,6 +1,7 @@
 import { LitElement, html } from "lit-element";
 
 import dropdownStyles from "./dropdownStyles";
+import controlStyles from "../Control/controlStyles";
 
 class Dropdown extends LitElement {
   static get properties() {
@@ -11,11 +12,12 @@ class Dropdown extends LitElement {
       isOpen: { type: Boolean },
       callback: { type: Function },
       callbackArgs: { type: Array },
+      label: { type: String },
     };
   }
 
   static get styles() {
-    return dropdownStyles;
+    return [controlStyles, dropdownStyles];
   }
 
   constructor() {
@@ -45,8 +47,9 @@ class Dropdown extends LitElement {
 
   render() {
     return html`
+      <label for="dropdown">${this.label}</label>
       <div class="dropdown-container">
-        <div class="header" @click=${this.toggleDropdown}>
+        <div id="dropdown" class="header" @click=${this.toggleDropdown}>
           <p class="selection">
             ${this.selectedItem?.text || this.placeholder}
           </p>

@@ -16,6 +16,13 @@ const sketchWindowStyles = css`
     font-size: 1rem;
     margin: 0;
   }
+
+  aleph-dropdown {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-right: 1rem;
+  }
 `;
 
 export default sketchWindowStyles;
