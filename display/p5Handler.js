@@ -74,6 +74,19 @@ const p5Handler = (layerIndex) => {
           }
         }
       );
+
+      ipcRenderer.on(
+        "layer-opacity-updated",
+        (event, serializedOpacityUpdate) => {
+          const opacityUpdate = JSON.parse(serializedOpacityUpdate);
+          if (opacityUpdate.layer === layerIndex) {
+            // find target canvas
+            const canvas = document.getElementById(`p5-${layerIndex}`);
+            // update blend mode
+            canvas.style.opacity = opacityUpdate.opacity * 0.01;
+          }
+        }
+      );
     };
 
     s.draw = () => {

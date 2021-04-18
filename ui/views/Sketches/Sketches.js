@@ -7,6 +7,7 @@ import "../../components/Window/Window";
 import "../../components/Flex/Flex";
 import "../../components/Sketch/Sketch";
 import "../../components/Dropdown/Dropdown";
+import "../../components/Control/Knob/Knob";
 
 class SketchWindow extends LitElement {
   static get properties() {
@@ -30,6 +31,7 @@ class SketchWindow extends LitElement {
         selectedSketch: null,
         isPlaying: true,
         blendMode: "normal",
+        opacity: 100,
       },
       {
         index: 1,
@@ -37,6 +39,7 @@ class SketchWindow extends LitElement {
         selectedSketch: null,
         isPlaying: true,
         blendMode: "normal",
+        opacity: 100,
       },
       {
         index: 2,
@@ -44,6 +47,7 @@ class SketchWindow extends LitElement {
         selectedSketch: null,
         isPlaying: true,
         blendMode: "normal",
+        opacity: 100,
       },
     ];
   }
@@ -77,6 +81,8 @@ class SketchWindow extends LitElement {
         };
       });
     });
+
+    setInterval(() => console.log(this.layers[0].opacity), 100);
   }
 
   setSelectedSketch(sketchName, layerIndex) {
@@ -111,6 +117,17 @@ class SketchWindow extends LitElement {
     );
   }
 
+  updateOpacity(opacity, layers, layerIndex) {
+    const layer = layers[layerIndex];
+    layer.opacity = opacity;
+    layers = [...layers];
+
+    ipcRenderer.send(
+      "layer-opacity-updated",
+      JSON.stringify({ layer: layerIndex, opacity })
+    );
+  }
+
   render() {
     return html`
       <aleph-window title="sketches">
@@ -128,6 +145,13 @@ class SketchWindow extends LitElement {
                       (mode) => mode.text === layer.blendMode
                     )}
                   ></aleph-dropdown>
+                  <aleph-knob
+                    minValue=${0}
+                    maxValue=${100}
+                    value=${layer.opacity}
+                    .callback=${this.updateOpacity}
+                    .callbackArgs=${[this.layers, layer.index]}
+                  ></aleph-knob>
                 </div>
                 ${layer.sketches.map(
                   (sketch) => html`

@@ -18,6 +18,8 @@ class Knob extends Control {
     this.width = 85;
     this.value = 127;
     this.label = this.createLabelText(this.type, this.index);
+    this.callback = () => {};
+    this.callbackArgs = [];
   }
 
   mapValueToCircumference() {
@@ -33,6 +35,7 @@ class Knob extends Control {
   updateValue(e) {
     if (this.isDraggable) {
       this.value = this.map(e.offsetY, this.height - 1, 0, 0, 129);
+      this.callback(this.value, ...this.callbackArgs);
       this.boundsCheck(e, [this.width, this.height]);
     }
   }

@@ -5,11 +5,10 @@ import theme from "../../../globalStyles/theme";
 const knobStyles = css`
   .knob-background {
     fill: none;
-    stroke: ${theme.colors.midGrey};
+    stroke: ${theme.colors.darkGrey};
   }
 
   .knob-value {
-    /* stroke: ${theme.colors.green}; */
     transform: rotate(90deg);
     fill: none;
     transform-origin: center;
