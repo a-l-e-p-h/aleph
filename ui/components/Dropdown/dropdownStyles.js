@@ -6,9 +6,10 @@ import { hex2rgba } from "../../../utils/browserUtils";
 const dropdownStyles = css`
   .dropdown-container {
     display: inline-block;
-    width: 324px;
+    width: var(--dropdown-width, 324px);
     background: ${theme.colors.black};
     border-radius: ${theme.measurements.borderRadius};
+    position: relative;
   }
 
   .dropdown-container p {
@@ -72,23 +73,28 @@ const dropdownStyles = css`
     display: inline-block;
     max-height: 150px;
     overflow-y: scroll;
+    position: absolute;
+    top: 30px;
+    left: 0;
+    z-index: 1;
   }
 
   ${theme.components.scrollBar}
 
   .option {
     font-size: 12px;
-    width: 300px;
+    width: var(--dropdown-option-width, 300px);
     color: ${theme.colors.white};
-    background: ${hex2rgba(theme.colors.darkGrey, 0.5)};
+    background: ${hex2rgba(theme.colors.black, 0.9)};
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
     transition: 300ms ease background, 300ms ease color;
+    z-index: 200;
   }
 
   .option:hover {
     cursor: pointer;
     color: ${theme.colors.green};
-    background: ${hex2rgba(theme.colors.darkGrey, 0.2)};
+    background: ${hex2rgba(theme.colors.darkGrey, 1)};
   }
 
   .option:active {

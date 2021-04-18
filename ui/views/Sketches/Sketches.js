@@ -81,8 +81,6 @@ class SketchWindow extends LitElement {
         };
       });
     });
-
-    setInterval(() => console.log(this.layers[0].opacity), 100);
   }
 
   setSelectedSketch(sketchName, layerIndex) {

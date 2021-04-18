@@ -22,6 +22,8 @@ const sketchWindowStyles = css`
     flex-direction: column;
     align-items: flex-start;
     margin-right: 1rem;
+    --dropdown-width: 140px;
+    --dropdown-option-width: 117px;
   }
 `;
 
