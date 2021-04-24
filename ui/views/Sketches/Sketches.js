@@ -117,17 +117,17 @@ class SketchWindow extends StoxyElement(LitElement) {
     return sketch === layer.selectedSketch && layer.isPlaying ? true : false;
   }
 
-  updateBlendMode(layerIndex, blendMode, layers) {
+  updateBlendMode(layerIndex, blendMode) {
     update("sketches.layers", (layers) => {
       const targetLayer = layers[layerIndex];
       targetLayer.blendMode = blendMode;
       return layers;
+    }).then(({ data: { layers: updatedLayers } }) => {
+      ipcRenderer.send(
+        "mix-blend-mode-updated",
+        JSON.stringify({ layer: updatedLayers[layerIndex] })
+      );
     });
-
-    ipcRenderer.send(
-      "mix-blend-mode-updated",
-      JSON.stringify({ layer: layerIndex, blendMode })
-    );
   }
 
   updateOpacity(opacity, layerIndex) {
@@ -157,7 +157,6 @@ class SketchWindow extends StoxyElement(LitElement) {
                       label="blend mode"
                       .items=${this.mixBlendModes[layer.index]}
                       .callback=${this.updateBlendMode}
-                      .callbackArgs=${this.layers}
                       .selectedItem=${this.mixBlendModes[layer.index].find(
                         (mode) => mode.text === layer.blendMode
                       )}

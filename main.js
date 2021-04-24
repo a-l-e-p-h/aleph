@@ -79,8 +79,9 @@ ipcMain.on("request-sketches", async () => {
   );
 });
 
-ipcMain.on("mix-blend-mode-updated", (event, blendModeUpdate) => {
-  sendToWindow(displayWindow, "mix-blend-mode-updated", blendModeUpdate);
+ipcMain.on("mix-blend-mode-updated", (event, layer) => {
+  console.log(layer);
+  sendToWindow(displayWindow, "mix-blend-mode-updated", layer);
 });
 
 ipcMain.on("layer-opacity-updated", (event, opacityUpdate) => {
