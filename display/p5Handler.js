@@ -5,17 +5,18 @@ const p5Handler = (layerIndex) => {
   const sketch = (s) => {
     let cnv;
     let audio = {};
-    const sketches = {};
     let currentSketch = () => {};
+    const sketches = {};
+    const canvas = document.getElementById(`p5-${layerIndex}`);
 
     s.setup = () => {
       cnv = s.createCanvas(s.windowWidth, s.windowHeight);
 
-      ipcRenderer.on("audio-features", (event, audioFeatures) => {
+      ipcRenderer.on("audio-features", (_, audioFeatures) => {
         audio = audioFeatures;
       });
 
-      ipcRenderer.on("sketch-changed", (event, sketchUpdate) => {
+      ipcRenderer.on("sketch-changed", (_, sketchUpdate) => {
         const { layer, layerIndex: updateLayer } = JSON.parse(sketchUpdate);
 
         if (updateLayer === layerIndex) {
@@ -36,13 +37,12 @@ const p5Handler = (layerIndex) => {
 
       ipcRenderer.send("request-sketches");
 
-      ipcRenderer.once("sketch-list", (event, sketchList) => {
+      ipcRenderer.once("sketch-list", (_, sketchList) => {
         // import sketches
         sketchList.forEach((sketch) => {
           const sketchName = path.basename(sketch);
           sketches[sketchName] = require(sketch);
         });
-
         // check for cached layer data
         const layerCache = JSON.parse(
           localStorage.getItem(`layer${layerIndex}`)
@@ -52,29 +52,34 @@ const p5Handler = (layerIndex) => {
         }
         // apply cached blend mode & opacity
         if (layerCache) {
-          const canvas = document.getElementById(`p5-${layerIndex}`);
           canvas.style.mixBlendMode = layerCache.blendMode;
-          canvas.style.opacity = layerCache.opacity * 0.01;
+          canvas.style.opacity = layerCache.opacity;
         }
       });
 
-      ipcRenderer.on("mix-blend-mode-updated", (event, serializedLayer) => {
-        const { layer } = JSON.parse(serializedLayer);
-        if (layer.index === layerIndex) {
-          const canvas = document.getElementById(`p5-${layerIndex}`);
-          canvas.style.mixBlendMode = layer.blendMode;
-          localStorage.setItem(`layer${layerIndex}`, JSON.stringify(layer));
-        }
+      ipcRenderer.on("mix-blend-mode-updated", (_, serializedLayer) => {
+        s.updateCss("mixBlendMode", serializedLayer, layerIndex, canvas);
       });
 
-      ipcRenderer.on("layer-opacity-updated", (event, serializedLayer) => {
-        const { layer } = JSON.parse(serializedLayer);
-        if (layer.index === layerIndex) {
-          const canvas = document.getElementById(`p5-${layerIndex}`);
-          canvas.style.opacity = layer.opacity * 0.01;
-          localStorage.setItem(`layer${layerIndex}`, JSON.stringify(layer));
-        }
+      ipcRenderer.on("layer-opacity-updated", (_, serializedLayer) => {
+        s.updateCss("opacity", serializedLayer, layerIndex, canvas);
       });
+    };
+
+    s.updateCss = (
+      updateType,
+      serializedLayerUpdate,
+      currentLayerIndex,
+      canvas
+    ) => {
+      const { layer } = JSON.parse(serializedLayerUpdate);
+      if (layer.index === currentLayerIndex) {
+        canvas.style[updateType] = layer[updateType];
+        localStorage.setItem(
+          `layer${currentLayerIndex}`,
+          JSON.stringify(layer)
+        );
+      }
     };
 
     s.draw = () => {

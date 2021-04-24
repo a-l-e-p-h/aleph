@@ -22,7 +22,7 @@ class SketchWindow extends StoxyElement(LitElement) {
             sketches: [],
             selectedSketch: "",
             isPlaying: true,
-            blendMode: "normal",
+            mixBlendMode: "normal",
             opacity: 100,
           },
           {
@@ -30,7 +30,7 @@ class SketchWindow extends StoxyElement(LitElement) {
             sketches: [],
             selectedSketch: "",
             isPlaying: true,
-            blendMode: "normal",
+            mixBlendMode: "normal",
             opacity: 100,
           },
           {
@@ -38,7 +38,7 @@ class SketchWindow extends StoxyElement(LitElement) {
             sketches: [],
             selectedSketch: "",
             isPlaying: true,
-            blendMode: "normal",
+            mixBlendMode: "normal",
             opacity: 100,
           },
         ],
@@ -122,7 +122,7 @@ class SketchWindow extends StoxyElement(LitElement) {
       data: { layers: updatedLayers },
     } = await update("sketches.layers", (layers) => {
       const targetLayer = layers[layerIndex];
-      targetLayer.blendMode = blendMode;
+      targetLayer.mixBlendMode = blendMode;
       return layers;
     });
 
@@ -143,7 +143,12 @@ class SketchWindow extends StoxyElement(LitElement) {
 
     ipcRenderer.send(
       "layer-opacity-updated",
-      JSON.stringify({ layer: updatedLayers[layerIndex] })
+      JSON.stringify({
+        layer: {
+          ...updatedLayers[layerIndex],
+          opacity: updatedLayers[layerIndex].opacity * 0.01,
+        },
+      })
     );
   }
 
@@ -162,7 +167,7 @@ class SketchWindow extends StoxyElement(LitElement) {
                       .items=${this.mixBlendModes[layer.index]}
                       .callback=${this.updateBlendMode}
                       .selectedItem=${this.mixBlendModes[layer.index].find(
-                        (mode) => mode.text === layer.blendMode
+                        (mode) => mode.text === layer.mixBlendMode
                       )}
                     ></aleph-dropdown>
                     <aleph-knob
