@@ -1,4 +1,6 @@
 import { LitElement, html } from "lit-element";
+import { update, persistKey } from "@stoxy/core";
+import { StoxyElement } from "@stoxy/element-mixin";
 const { ipcRenderer } = require("electron");
 
 import SketchWindowStyles from "./SketchWindowStyles";
@@ -9,7 +11,41 @@ import "../../components/Sketch/Sketch";
 import "../../components/Dropdown/Dropdown";
 import "../../components/Control/Knob/Knob";
 
-class SketchWindow extends LitElement {
+class SketchWindow extends StoxyElement(LitElement) {
+  static get stoxyProperties() {
+    return {
+      key: "sketches",
+      state: {
+        layers: [
+          {
+            index: 0,
+            sketches: [],
+            selectedSketch: "",
+            isPlaying: true,
+            blendMode: "normal",
+            opacity: 100,
+          },
+          {
+            index: 1,
+            sketches: [],
+            selectedSketch: "",
+            isPlaying: true,
+            blendMode: "normal",
+            opacity: 100,
+          },
+          {
+            index: 2,
+            sketches: [],
+            selectedSketch: "",
+            isPlaying: true,
+            blendMode: "normal",
+            opacity: 100,
+          },
+        ],
+      },
+    };
+  }
+
   static get properties() {
     return {
       layers: { type: Array },
@@ -24,54 +60,27 @@ class SketchWindow extends LitElement {
   constructor() {
     super();
     this.mixBlendModes = mixBlendModes;
-    this.layers = [
-      {
-        index: 0,
-        sketches: [],
-        selectedSketch: null,
-        isPlaying: true,
-        blendMode: "normal",
-        opacity: 100,
-      },
-      {
-        index: 1,
-        sketches: [],
-        selectedSketch: null,
-        isPlaying: true,
-        blendMode: "normal",
-        opacity: 100,
-      },
-      {
-        index: 2,
-        sketches: [],
-        selectedSketch: null,
-        isPlaying: true,
-        blendMode: "normal",
-        opacity: 100,
-      },
-    ];
+    this.layers = [];
   }
 
   connectedCallback() {
     super.connectedCallback();
+    persistKey("sketches");
     ipcRenderer.send("request-sketches");
+    // initialize layers and blend modes
     ipcRenderer.once("sketch-list", (e, sketches) => {
-      this.layers = this.layers.map((layer) => {
-        return {
-          ...layer,
-          sketches,
-        };
-      });
+      update("sketches.layers", (layers) =>
+        layers.map((layer) => {
+          return {
+            ...layer,
+            sketches,
+          };
+        })
+      ).then(() => this.setupBlendModes());
     });
+  }
 
-    this.layers.forEach((_, idx) => {
-      const lastSketch = JSON.parse(localStorage.getItem(`lastSketch${idx}`));
-      if (lastSketch) {
-        this.layers[idx].selectedSketch = lastSketch.sketch;
-        this.layers[idx].isPlaying = lastSketch.isPlaying;
-      }
-    });
-
+  setupBlendModes() {
     // build up blendMode array per-layer
     this.mixBlendModes = this.layers.map((_, idx) => {
       return mixBlendModes.map((blendMode) => {
@@ -84,19 +93,21 @@ class SketchWindow extends LitElement {
   }
 
   setSelectedSketch(sketchName, layerIndex) {
-    const layer = this.layers[layerIndex];
-    // if changing to a new sketch
-    if (layer.selectedSketch !== sketchName) {
-      layer.selectedSketch = sketchName;
-      layer.isPlaying = true;
-    }
-    // if toggling play state
-    else {
-      layer.isPlaying = !layer.isPlaying;
-    }
-    // update
-    this.layers = [...this.layers];
-    ipcRenderer.send("sketch-changed", JSON.stringify(this.layers));
+    update("sketches.layers", (layers) => {
+      const targetLayer = layers[layerIndex];
+
+      // if changing to new sketch
+      if (targetLayer.selectedSketch !== sketchName) {
+        targetLayer.selectedSketch = sketchName;
+        targetLayer.isPlaying = true;
+      }
+      // if toggling play state
+      else {
+        targetLayer.isPlaying = !targetLayer.isPlaying;
+      }
+      ipcRenderer.send("sketch-changed", JSON.stringify(layers));
+      return layers;
+    });
   }
 
   isSketchPlaying(sketch, layer) {
@@ -104,21 +115,24 @@ class SketchWindow extends LitElement {
   }
 
   updateBlendMode(layerIndex, blendMode, layers) {
-    // update layer
-    const layer = layers[layerIndex];
-    layer.blendMode = blendMode;
-    layers = [...layers];
-    // ipc to displayWindow
+    update("sketches.layers", (layers) => {
+      const targetLayer = layers[layerIndex];
+      targetLayer.blendMode = blendMode;
+      return layers;
+    });
+
     ipcRenderer.send(
       "mix-blend-mode-updated",
       JSON.stringify({ layer: layerIndex, blendMode })
     );
   }
 
-  updateOpacity(opacity, layers, layerIndex) {
-    const layer = layers[layerIndex];
-    layer.opacity = opacity;
-    layers = [...layers];
+  updateOpacity(opacity, layerIndex) {
+    update("sketches.layers", (layers) => {
+      const targetLayer = layers[layerIndex];
+      targetLayer.opacity = opacity;
+      return layers;
+    });
 
     ipcRenderer.send(
       "layer-opacity-updated",
@@ -154,7 +168,7 @@ class SketchWindow extends LitElement {
                       .strokeWidth=${6}
                       value=${layer.opacity}
                       .callback=${this.updateOpacity}
-                      .callbackArgs=${[this.layers, layer.index]}
+                      .callbackArgs=${[layer.index]}
                     ></aleph-knob>
                   </aleph-flex>
                 </div>
