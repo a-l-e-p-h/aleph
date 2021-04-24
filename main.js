@@ -86,3 +86,7 @@ ipcMain.on("mix-blend-mode-updated", (event, layer) => {
 ipcMain.on("layer-opacity-updated", (event, layer) => {
   sendToWindow(displayWindow, "layer-opacity-updated", layer);
 });
+
+ipcMain.on("layer-muted", (_, layer) => {
+  sendToWindow(displayWindow, "layer-muted", layer);
+});

@@ -50,10 +50,11 @@ const p5Handler = (layerIndex) => {
         if (layerCache && layerCache.isPlaying) {
           currentSketch = sketches[layerCache.selectedSketch];
         }
-        // apply cached blend mode & opacity
+        // apply cached css properties
         if (layerCache) {
           canvas.style.mixBlendMode = layerCache.blendMode;
           canvas.style.opacity = layerCache.opacity;
+          canvas.style.visibility = layerCache.visibility;
         }
       });
 
@@ -63,6 +64,10 @@ const p5Handler = (layerIndex) => {
 
       ipcRenderer.on("layer-opacity-updated", (_, serializedLayer) => {
         s.updateCss("opacity", serializedLayer, layerIndex, canvas);
+      });
+
+      ipcRenderer.on("layer-muted", (_, serializedLayer) => {
+        s.updateCss("visibility", serializedLayer, layerIndex, canvas);
       });
     };
 

@@ -8,6 +8,7 @@ import { mixBlendModes } from "./mixBlendModes";
 import "../../components/Window/Window";
 import "../../components/Flex/Flex";
 import "../../components/Sketch/Sketch";
+import "../../components/Button/Button";
 import "../../components/Dropdown/Dropdown";
 import "../../components/Control/Knob/Knob";
 
@@ -22,6 +23,7 @@ class SketchWindow extends StoxyElement(LitElement) {
             sketches: [],
             selectedSketch: "",
             isPlaying: true,
+            visibility: "visible",
             mixBlendMode: "normal",
             opacity: 100,
           },
@@ -30,6 +32,7 @@ class SketchWindow extends StoxyElement(LitElement) {
             sketches: [],
             selectedSketch: "",
             isPlaying: true,
+            visibility: "visible",
             mixBlendMode: "normal",
             opacity: 100,
           },
@@ -38,6 +41,7 @@ class SketchWindow extends StoxyElement(LitElement) {
             sketches: [],
             selectedSketch: "",
             isPlaying: true,
+            visibility: "visible",
             mixBlendMode: "normal",
             opacity: 100,
           },
@@ -152,6 +156,26 @@ class SketchWindow extends StoxyElement(LitElement) {
     );
   }
 
+  async muteLayer(layerIndex) {
+    const {
+      data: { layers: updatedLayers },
+    } = await update("sketches.layers", (layers) => {
+      const targetLayer = layers[layerIndex];
+      const isMutedAlready = targetLayer.visibility === "hidden";
+
+      isMutedAlready
+        ? (targetLayer.visibility = "visible")
+        : (targetLayer.visibility = "hidden");
+
+      return layers;
+    });
+
+    ipcRenderer.send(
+      "layer-muted",
+      JSON.stringify({ layer: updatedLayers[layerIndex] })
+    );
+  }
+
   render() {
     return html`
       <aleph-window title="sketches">
@@ -182,6 +206,12 @@ class SketchWindow extends StoxyElement(LitElement) {
                       .callbackArgs=${[layer.index]}
                     ></aleph-knob>
                   </aleph-flex>
+                  <aleph-button
+                    @click=${() => this.muteLayer(layer.index)}
+                    .isActive=${layer.visibility === "hidden" ? true : false}
+                    text="mute"
+                  ></aleph-button>
+                  <aleph-button text="solo">solo</aleph-button>
                 </div>
                 ${layer.sketches.map(
                   (sketch) => html`
