@@ -7,6 +7,7 @@ class Button extends LitElement {
     return {
       text: { type: String },
       isDisabled: { type: Boolean },
+      isActive: { type: Boolean },
     };
   }
 
@@ -18,15 +19,15 @@ class Button extends LitElement {
     super();
     this.text = "";
     this.isDisabled = false;
-  }
-
-  clickHandler(event) {
-    console.log("in child component: ", event.target);
+    this.isActive = false;
   }
 
   render() {
     return html`
-      <button @click="${this.clickHandler}" ?disabled=${this.isDisabled}>
+      <button
+        class=${this.isActive ? "active" : null}
+        ?disabled=${this.isDisabled}
+      >
         ${this.text}
       </button>
     `;

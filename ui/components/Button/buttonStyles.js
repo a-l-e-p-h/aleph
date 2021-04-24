@@ -26,7 +26,7 @@ const buttonStyles = css`
     box-shadow: 2px 2px 0px ${theme.colors.blue};
   }
 
-  button:active {
+  button:active, .active {
     border: 1px solid ${theme.colors.green} !important;
     outline: none;
     background: ${theme.colors.white};
