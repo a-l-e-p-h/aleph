@@ -15,32 +15,34 @@ const p5Handler = (layerIndex) => {
         audio = audioFeatures;
       });
 
-      ipcRenderer.on("sketch-changed", (event, serializedLayers) => {
-        const layers = JSON.parse(serializedLayers);
-        const newSketch = sketches[layers[layerIndex].selectedSketch];
+      ipcRenderer.on("sketch-changed", (event, sketchUpdate) => {
+        const { layer, layerIndex: updateLayer } = JSON.parse(sketchUpdate);
 
-        // if layer is paused, set current to default/empty sketch
-        if (!layers[layerIndex].isPlaying) {
-          currentSketch = s.defaultSketch;
-          localStorage.setItem(
-            `lastSketch${layerIndex}`,
-            JSON.stringify({
-              sketch: layers[layerIndex].selectedSketch,
-              isPlaying: false,
-            })
-          );
-        }
-        // only update if this layer has received a change
-        else if (currentSketch !== newSketch) {
-          currentSketch = newSketch;
-          localStorage.setItem(
-            `lastSketch${layerIndex}`,
-            JSON.stringify({
-              sketch: layers[layerIndex].selectedSketch,
-              isPlaying: true,
-            })
-          );
-          s.resetStyles();
+        if (updateLayer === layerIndex) {
+          const newSketch = sketches[layer.selectedSketch];
+          // if layer is paused, set current to default/empty sketch
+          if (!layer.isPlaying) {
+            currentSketch = s.defaultSketch;
+            localStorage.setItem(
+              `lastSketch${layerIndex}`,
+              JSON.stringify({
+                sketch: layer.selectedSketch,
+                isPlaying: false,
+              })
+            );
+          }
+          // only update if this layer has received a change
+          else if (currentSketch !== newSketch) {
+            currentSketch = newSketch;
+            localStorage.setItem(
+              `lastSketch${layerIndex}`,
+              JSON.stringify({
+                sketch: layer.selectedSketch,
+                isPlaying: true,
+              })
+            );
+            s.resetStyles();
+          }
         }
       });
 

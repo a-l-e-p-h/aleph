@@ -63,9 +63,9 @@ ipcMain.on("audio-features", (event, audioFeatures) => {
   }
 });
 
-ipcMain.on("sketch-changed", (event, sketchLayers) => {
+ipcMain.on("sketch-changed", (event, sketchUpdate) => {
   if (displayWindow) {
-    displayWindow.webContents.send("sketch-changed", sketchLayers);
+    displayWindow.webContents.send("sketch-changed", sketchUpdate);
   }
 });
 

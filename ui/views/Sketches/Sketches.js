@@ -105,7 +105,10 @@ class SketchWindow extends StoxyElement(LitElement) {
       else {
         targetLayer.isPlaying = !targetLayer.isPlaying;
       }
-      ipcRenderer.send("sketch-changed", JSON.stringify(layers));
+      ipcRenderer.send(
+        "sketch-changed",
+        JSON.stringify({ layer: layers[layerIndex], layerIndex })
+      );
       return layers;
     });
   }
