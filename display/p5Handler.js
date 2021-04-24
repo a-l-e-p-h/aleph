@@ -50,36 +50,31 @@ const p5Handler = (layerIndex) => {
         if (layerCache && layerCache.isPlaying) {
           currentSketch = sketches[layerCache.selectedSketch];
         }
-        // apply cached blend mode
+        // apply cached blend mode & opacity
         if (layerCache) {
           const canvas = document.getElementById(`p5-${layerIndex}`);
           canvas.style.mixBlendMode = layerCache.blendMode;
+          canvas.style.opacity = layerCache.opacity * 0.01;
         }
       });
 
       ipcRenderer.on("mix-blend-mode-updated", (event, serializedLayer) => {
         const { layer } = JSON.parse(serializedLayer);
         if (layer.index === layerIndex) {
-          // find target canvas
           const canvas = document.getElementById(`p5-${layerIndex}`);
-          // update blend mode
           canvas.style.mixBlendMode = layer.blendMode;
           localStorage.setItem(`layer${layerIndex}`, JSON.stringify(layer));
         }
       });
 
-      ipcRenderer.on(
-        "layer-opacity-updated",
-        (event, serializedOpacityUpdate) => {
-          const opacityUpdate = JSON.parse(serializedOpacityUpdate);
-          if (opacityUpdate.layer === layerIndex) {
-            // find target canvas
-            const canvas = document.getElementById(`p5-${layerIndex}`);
-            // update blend mode
-            canvas.style.opacity = opacityUpdate.opacity * 0.01;
-          }
+      ipcRenderer.on("layer-opacity-updated", (event, serializedLayer) => {
+        const { layer } = JSON.parse(serializedLayer);
+        if (layer.index === layerIndex) {
+          const canvas = document.getElementById(`p5-${layerIndex}`);
+          canvas.style.opacity = layer.opacity * 0.01;
+          localStorage.setItem(`layer${layerIndex}`, JSON.stringify(layer));
         }
-      );
+      });
     };
 
     s.draw = () => {

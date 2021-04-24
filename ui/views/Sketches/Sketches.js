@@ -117,21 +117,25 @@ class SketchWindow extends StoxyElement(LitElement) {
     return sketch === layer.selectedSketch && layer.isPlaying ? true : false;
   }
 
-  updateBlendMode(layerIndex, blendMode) {
-    update("sketches.layers", (layers) => {
+  async updateBlendMode(layerIndex, blendMode) {
+    const {
+      data: { layers: updatedLayers },
+    } = await update("sketches.layers", (layers) => {
       const targetLayer = layers[layerIndex];
       targetLayer.blendMode = blendMode;
       return layers;
-    }).then(({ data: { layers: updatedLayers } }) => {
-      ipcRenderer.send(
-        "mix-blend-mode-updated",
-        JSON.stringify({ layer: updatedLayers[layerIndex] })
-      );
     });
+
+    ipcRenderer.send(
+      "mix-blend-mode-updated",
+      JSON.stringify({ layer: updatedLayers[layerIndex] })
+    );
   }
 
-  updateOpacity(opacity, layerIndex) {
-    update("sketches.layers", (layers) => {
+  async updateOpacity(opacity, layerIndex) {
+    const {
+      data: { layers: updatedLayers },
+    } = await update("sketches.layers", (layers) => {
       const targetLayer = layers[layerIndex];
       targetLayer.opacity = opacity;
       return layers;
@@ -139,7 +143,7 @@ class SketchWindow extends StoxyElement(LitElement) {
 
     ipcRenderer.send(
       "layer-opacity-updated",
-      JSON.stringify({ layer: layerIndex, opacity })
+      JSON.stringify({ layer: updatedLayers[layerIndex] })
     );
   }
 

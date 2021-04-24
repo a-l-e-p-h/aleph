@@ -80,10 +80,9 @@ ipcMain.on("request-sketches", async () => {
 });
 
 ipcMain.on("mix-blend-mode-updated", (event, layer) => {
-  console.log(layer);
   sendToWindow(displayWindow, "mix-blend-mode-updated", layer);
 });
 
-ipcMain.on("layer-opacity-updated", (event, opacityUpdate) => {
-  sendToWindow(displayWindow, "layer-opacity-updated", opacityUpdate);
+ipcMain.on("layer-opacity-updated", (event, layer) => {
+  sendToWindow(displayWindow, "layer-opacity-updated", layer);
 });
