@@ -23,6 +23,8 @@ class SketchWindow extends StoxyElement(LitElement) {
             sketches: [],
             selectedSketch: "",
             isPlaying: true,
+            isMuted: false,
+            isSoloed: false,
             visibility: "visible",
             mixBlendMode: "normal",
             opacity: 100,
@@ -32,6 +34,8 @@ class SketchWindow extends StoxyElement(LitElement) {
             sketches: [],
             selectedSketch: "",
             isPlaying: true,
+            isMuted: false,
+            isSoloed: false,
             visibility: "visible",
             mixBlendMode: "normal",
             opacity: 100,
@@ -41,6 +45,8 @@ class SketchWindow extends StoxyElement(LitElement) {
             sketches: [],
             selectedSketch: "",
             isPlaying: true,
+            isMuted: false,
+            isSoloed: false,
             visibility: "visible",
             mixBlendMode: "normal",
             opacity: 100,
@@ -161,11 +167,12 @@ class SketchWindow extends StoxyElement(LitElement) {
       data: { layers: updatedLayers },
     } = await update("sketches.layers", (layers) => {
       const targetLayer = layers[layerIndex];
-      const isMutedAlready = targetLayer.visibility === "hidden";
 
-      isMutedAlready
+      targetLayer.isMuted
         ? (targetLayer.visibility = "visible")
         : (targetLayer.visibility = "hidden");
+
+      targetLayer.isMuted = !targetLayer.isMuted;
 
       return layers;
     });
@@ -174,6 +181,36 @@ class SketchWindow extends StoxyElement(LitElement) {
       "layer-muted",
       JSON.stringify({ layer: updatedLayers[layerIndex] })
     );
+  }
+
+  async soloLayer(layerIndex) {
+    const {
+      data: { layers: updatedLayers },
+    } = await update("sketches.layers", (layers) => {
+      const targetLayer = layers[layerIndex];
+
+      // flip targetLayer's isSoloed/visibility
+      targetLayer.isSoloed = !targetLayer.isSoloed;
+      targetLayer.isSoloed ? (targetLayer.visibility = "visible") : null;
+
+      const otherLayers = layers.filter((layer) => layer.index !== layerIndex);
+      otherLayers.forEach((layer) => {
+        // flip other layer's visibilities
+        if (targetLayer.isSoloed) {
+          layer.visibility = "hidden";
+        } else if (!targetLayer.isSoloed && !layer.isMuted) {
+          layer.visibility = "visible";
+        }
+        // de-solo any currently soloed layers
+        if (layer.isSoloed) {
+          layer.isSoloed = false;
+        }
+      });
+
+      return layers;
+    });
+
+    ipcRenderer.send("layer-soloed", JSON.stringify({ layers: updatedLayers }));
   }
 
   render() {
@@ -208,10 +245,15 @@ class SketchWindow extends StoxyElement(LitElement) {
                   </aleph-flex>
                   <aleph-button
                     @click=${() => this.muteLayer(layer.index)}
-                    .isActive=${layer.visibility === "hidden" ? true : false}
+                    .isActive=${layer.isMuted}
                     text="mute"
                   ></aleph-button>
-                  <aleph-button text="solo">solo</aleph-button>
+                  <aleph-button
+                    @click=${() => this.soloLayer(layer.index)}
+                    .isActive=${layer.isSoloed}
+                    text="solo"
+                    >solo</aleph-button
+                  >
                 </div>
                 ${layer.sketches.map(
                   (sketch) => html`

@@ -90,3 +90,7 @@ ipcMain.on("layer-opacity-updated", (event, layer) => {
 ipcMain.on("layer-muted", (_, layer) => {
   sendToWindow(displayWindow, "layer-muted", layer);
 });
+
+ipcMain.on("layer-soloed", (_, layers) => {
+  sendToWindow(displayWindow, "layer-soloed", layers);
+});

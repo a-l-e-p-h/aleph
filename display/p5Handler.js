@@ -69,15 +69,22 @@ const p5Handler = (layerIndex) => {
       ipcRenderer.on("layer-muted", (_, serializedLayer) => {
         s.updateCss("visibility", serializedLayer, layerIndex, canvas);
       });
+
+      ipcRenderer.on("layer-soloed", (_, serializedLayers) => {
+        const { layers } = JSON.parse(serializedLayers);
+
+        layers.forEach((layer) =>
+          s.updateCss("visibility", layer, layerIndex, canvas)
+        );
+      });
     };
 
-    s.updateCss = (
-      updateType,
-      serializedLayerUpdate,
-      currentLayerIndex,
-      canvas
-    ) => {
-      const { layer } = JSON.parse(serializedLayerUpdate);
+    s.updateCss = (updateType, layerUpdate, currentLayerIndex, canvas) => {
+      const layer =
+        typeof layerUpdate === "string"
+          ? JSON.parse(layerUpdate).layer
+          : layerUpdate;
+
       if (layer.index === currentLayerIndex) {
         canvas.style[updateType] = layer[updateType];
         localStorage.setItem(
