@@ -5,88 +5,93 @@ const p5Handler = (layerIndex) => {
   const sketch = (s) => {
     let cnv;
     let audio = {};
-    const sketches = {};
     let currentSketch = () => {};
+    const sketches = {};
+    const canvas = document.getElementById(`p5-${layerIndex}`);
 
     s.setup = () => {
       cnv = s.createCanvas(s.windowWidth, s.windowHeight);
 
-      ipcRenderer.on("audio-features", (event, audioFeatures) => {
+      ipcRenderer.on("audio-features", (_, audioFeatures) => {
         audio = audioFeatures;
       });
 
-      ipcRenderer.on("sketch-changed", (event, serializedLayers) => {
-        const layers = JSON.parse(serializedLayers);
-        const newSketch = sketches[layers[layerIndex].selectedSketch];
+      ipcRenderer.on("sketch-changed", (_, sketchUpdate) => {
+        const { layer, layerIndex: updateLayer } = JSON.parse(sketchUpdate);
 
-        // if layer is paused, set current to default/empty sketch
-        if (!layers[layerIndex].isPlaying) {
-          currentSketch = s.defaultSketch;
-          localStorage.setItem(
-            `lastSketch${layerIndex}`,
-            JSON.stringify({
-              sketch: layers[layerIndex].selectedSketch,
-              isPlaying: false,
-            })
-          );
-        }
-        // only update if this layer has received a change
-        else if (currentSketch !== newSketch) {
-          currentSketch = newSketch;
-          localStorage.setItem(
-            `lastSketch${layerIndex}`,
-            JSON.stringify({
-              sketch: layers[layerIndex].selectedSketch,
-              isPlaying: true,
-            })
-          );
-          s.resetStyles();
+        if (updateLayer === layerIndex) {
+          const newSketch = sketches[layer.selectedSketch];
+          // if layer is paused, set current to default/empty sketch
+          if (!layer.isPlaying) {
+            currentSketch = s.defaultSketch;
+            localStorage.setItem(`layer${layerIndex}`, JSON.stringify(layer));
+          }
+          // only update if this layer has received a change
+          else if (currentSketch !== newSketch) {
+            currentSketch = newSketch;
+            localStorage.setItem(`layer${layerIndex}`, JSON.stringify(layer));
+            s.resetStyles();
+          }
         }
       });
 
       ipcRenderer.send("request-sketches");
 
-      ipcRenderer.once("sketch-list", (event, sketchList) => {
+      ipcRenderer.once("sketch-list", (_, sketchList) => {
         // import sketches
         sketchList.forEach((sketch) => {
           const sketchName = path.basename(sketch);
           sketches[sketchName] = require(sketch);
         });
-
-        // check for prev. loaded sketch
-        const lastSketch = JSON.parse(
-          localStorage.getItem(`lastSketch${layerIndex}`)
+        // check for cached layer data
+        const layerCache = JSON.parse(
+          localStorage.getItem(`layer${layerIndex}`)
         );
-        if (lastSketch && lastSketch.isPlaying) {
-          currentSketch = sketches[lastSketch.sketch];
+        if (layerCache && layerCache.isPlaying) {
+          currentSketch = sketches[layerCache.selectedSketch];
+        }
+        // apply cached css properties
+        if (layerCache) {
+          canvas.style.mixBlendMode = layerCache.blendMode;
+          canvas.style.opacity = layerCache.opacity;
+          canvas.style.visibility = layerCache.visibility;
         }
       });
 
-      ipcRenderer.on(
-        "mix-blend-mode-updated",
-        (event, serializedBlendModeUpdate) => {
-          const blendModeUpdate = JSON.parse(serializedBlendModeUpdate);
-          if (blendModeUpdate.layer === layerIndex) {
-            // find target canvas
-            const canvas = document.getElementById(`p5-${layerIndex}`);
-            // update blend mode
-            canvas.style.mixBlendMode = blendModeUpdate.blendMode;
-          }
-        }
-      );
+      ipcRenderer.on("mix-blend-mode-updated", (_, serializedLayer) => {
+        s.updateCss("mixBlendMode", serializedLayer, layerIndex, canvas);
+      });
 
-      ipcRenderer.on(
-        "layer-opacity-updated",
-        (event, serializedOpacityUpdate) => {
-          const opacityUpdate = JSON.parse(serializedOpacityUpdate);
-          if (opacityUpdate.layer === layerIndex) {
-            // find target canvas
-            const canvas = document.getElementById(`p5-${layerIndex}`);
-            // update blend mode
-            canvas.style.opacity = opacityUpdate.opacity * 0.01;
-          }
-        }
-      );
+      ipcRenderer.on("layer-opacity-updated", (_, serializedLayer) => {
+        s.updateCss("opacity", serializedLayer, layerIndex, canvas);
+      });
+
+      ipcRenderer.on("layer-muted", (_, serializedLayer) => {
+        s.updateCss("visibility", serializedLayer, layerIndex, canvas);
+      });
+
+      ipcRenderer.on("layer-soloed", (_, serializedLayers) => {
+        const { layers } = JSON.parse(serializedLayers);
+
+        layers.forEach((layer) =>
+          s.updateCss("visibility", layer, layerIndex, canvas)
+        );
+      });
+    };
+
+    s.updateCss = (updateType, layerUpdate, currentLayerIndex, canvas) => {
+      const layer =
+        typeof layerUpdate === "string"
+          ? JSON.parse(layerUpdate).layer
+          : layerUpdate;
+
+      if (layer.index === currentLayerIndex) {
+        canvas.style[updateType] = layer[updateType];
+        localStorage.setItem(
+          `layer${currentLayerIndex}`,
+          JSON.stringify(layer)
+        );
+      }
     };
 
     s.draw = () => {

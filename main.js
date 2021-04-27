@@ -63,9 +63,9 @@ ipcMain.on("audio-features", (event, audioFeatures) => {
   }
 });
 
-ipcMain.on("sketch-changed", (event, sketchLayers) => {
+ipcMain.on("sketch-changed", (event, sketchUpdate) => {
   if (displayWindow) {
-    displayWindow.webContents.send("sketch-changed", sketchLayers);
+    displayWindow.webContents.send("sketch-changed", sketchUpdate);
   }
 });
 
@@ -79,10 +79,18 @@ ipcMain.on("request-sketches", async () => {
   );
 });
 
-ipcMain.on("mix-blend-mode-updated", (event, blendModeUpdate) => {
-  sendToWindow(displayWindow, "mix-blend-mode-updated", blendModeUpdate);
+ipcMain.on("mix-blend-mode-updated", (event, layer) => {
+  sendToWindow(displayWindow, "mix-blend-mode-updated", layer);
 });
 
-ipcMain.on("layer-opacity-updated", (event, opacityUpdate) => {
-  sendToWindow(displayWindow, "layer-opacity-updated", opacityUpdate);
+ipcMain.on("layer-opacity-updated", (event, layer) => {
+  sendToWindow(displayWindow, "layer-opacity-updated", layer);
+});
+
+ipcMain.on("layer-muted", (_, layer) => {
+  sendToWindow(displayWindow, "layer-muted", layer);
+});
+
+ipcMain.on("layer-soloed", (_, layers) => {
+  sendToWindow(displayWindow, "layer-soloed", layers);
 });
