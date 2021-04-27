@@ -1,5 +1,5 @@
 import { LitElement, html } from "lit";
-import { styleMap } from "lit-html/directives/style-map";
+import { styleMap } from "lit/directives/style-map.js";
 
 import windowStyles from "./windowStyles";
 import "./WindowButton";
