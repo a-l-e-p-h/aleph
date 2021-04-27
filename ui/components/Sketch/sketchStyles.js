@@ -1,4 +1,4 @@
-import { css } from "lit-element";
+import { css } from "lit";
 
 import theme from "../../globalStyles/theme";
 import { baseButtonStyles } from "../Button/buttonStyles";

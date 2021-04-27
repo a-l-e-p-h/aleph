@@ -1,4 +1,4 @@
-import { LitElement, html } from "lit-element";
+import { LitElement, html } from "lit";
 
 import "./ui/views/AudioSettings/AudioSettings";
 import "./ui/views/Sketches/Sketches";

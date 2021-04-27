@@ -1,8 +1,12 @@
-import { css } from "lit-element";
+import { css } from "lit";
 
 import theme from "../../globalStyles/theme";
 
 const sketchWindowStyles = css`
+  h3 {
+    user-select: none;
+  }
+
   .layer-container {
     padding: 7px;
     background: ${theme.colors.midGrey};

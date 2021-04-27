@@ -1,5 +1,5 @@
-import { LitElement, html } from "lit-element";
-import { styleMap } from "lit-html/directives/style-map";
+import { LitElement, html } from "lit";
+import { styleMap } from "lit/directives/style-map.js";
 
 class Flex extends LitElement {
   static get properties() {

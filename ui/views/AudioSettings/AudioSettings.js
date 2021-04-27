@@ -1,4 +1,4 @@
-import { LitElement, html } from "lit-element";
+import { LitElement, html } from "lit";
 
 import "../../components/Window/Window";
 import "../../components/Dropdown/Dropdown";

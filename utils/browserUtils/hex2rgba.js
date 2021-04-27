@@ -1,4 +1,4 @@
-import { css } from "lit-element";
+import { css } from "lit";
 
 /**
  * Converts a given hex color to an rgba color with the given opacity. Processed by
