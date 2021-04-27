@@ -1,4 +1,4 @@
-import { html } from "lit-element";
+import { html } from "lit";
 
 import "../../Flex/Flex";
 import Control from "../Control";

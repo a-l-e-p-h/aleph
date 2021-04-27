@@ -1,4 +1,4 @@
-import { LitElement, html } from "lit-element";
+import { LitElement, html } from "lit";
 
 import checkboxStyles from "./checkboxStyles";
 import "../Flex/Flex";

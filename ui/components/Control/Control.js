@@ -1,4 +1,4 @@
-import { LitElement } from "lit-element";
+import { LitElement } from "lit";
 
 class Control extends LitElement {
   static get properties() {

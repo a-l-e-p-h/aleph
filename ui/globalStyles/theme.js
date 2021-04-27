@@ -1,4 +1,4 @@
-import { css } from "lit-element";
+import { css } from "lit";
 
 const green = css`#12e4a6`;
 const blue = css`#00b4f6`;

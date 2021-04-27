@@ -1,4 +1,4 @@
-import { LitElement, html } from "lit-element";
+import { LitElement, html } from "lit";
 import { update, persistKey } from "@stoxy/core";
 import { StoxyElement } from "@stoxy/element-mixin";
 const { ipcRenderer } = require("electron");
