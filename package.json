@@ -43,6 +43,7 @@
     "@stoxy/core": "^0.4.9",
     "@stoxy/element-mixin": "^1.3.0",
     "electron-is-dev": "^1.2.0",
+    "lit": "^2.0.0-rc.1",
     "lit-element": "^2.4.0",
     "p5": "^1.2.0"
   }
