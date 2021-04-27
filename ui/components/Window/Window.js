@@ -21,25 +21,25 @@ class Window extends LitElement {
     super();
     this.title = "";
     this.isMaximized = true;
-    this.contentWidth = null;
+    this.contentWidth = 0;
   }
 
   minimize() {
     this.isMaximized = false;
-    console.log(this.isMaximized);
   }
 
   maximimze() {
     this.isMaximized = true;
-    console.log(this.isMaximized);
   }
 
   updated() {
-    const { width } = this.renderRoot
-      .querySelector(".window-container")
-      .getBoundingClientRect();
-    // acct for padding
-    this.contentWidth = width - 20;
+    setTimeout(() => {
+      const { width } = this.renderRoot
+        .querySelector(".window-container")
+        .getBoundingClientRect();
+      // acct for padding
+      this.contentWidth = width - 20;
+    }, 32);
   }
 
   render() {
