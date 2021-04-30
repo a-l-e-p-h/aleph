@@ -1,13 +1,53 @@
 import { LitElement, html } from "lit";
+import { StoxyElement } from "@stoxy/element-mixin";
 
 import "../../components/Window/Window";
+import "../../components/Flex/Flex";
+import "../../components/Control/Knob/Knob";
 import "../../components/Dropdown/Dropdown";
+import { update } from "@stoxy/core";
 
-class AudioSettings extends LitElement {
+class AudioSettings extends StoxyElement(LitElement) {
+  static get stoxyProperties() {
+    return {
+      key: "audio",
+      init: true,
+      state: {
+        params: [
+          {
+            key: "volume",
+            value: 50,
+          },
+          {
+            key: "bass",
+            value: 50,
+          },
+          {
+            key: "mid",
+            value: 50,
+          },
+          {
+            key: "high",
+            value: 50,
+          },
+          {
+            key: "fft smooth",
+            value: 50,
+          },
+          {
+            key: "vol smooth",
+            value: 50,
+          },
+        ],
+      },
+    };
+  }
+
   static get properties() {
     return {
       audioDevices: { type: Array },
       lastDevice: { type: Object },
+      params: { type: Array },
     };
   }
 
@@ -15,6 +55,7 @@ class AudioSettings extends LitElement {
     super();
     this.audioDevices = [];
     this.lastDevice = null;
+    this.params = [];
   }
 
   async connectedCallback() {
@@ -44,9 +85,29 @@ class AudioSettings extends LitElement {
     );
   }
 
+  updateAudioParams(value, index) {
+    update("audio.params", (params) => {
+      const targetParam = params[index];
+      targetParam.value = value;
+      return params;
+    });
+  }
+
   render() {
     return html`
       <aleph-window title="audio">
+        <aleph-flex>
+          ${this.params.map(
+            (param, index) =>
+              html`
+                <aleph-knob
+                  label=${param.key}
+                  .callback=${this.updateAudioParams}
+                  .callbackArgs=${[index]}
+                ></aleph-knob>
+              `
+          )}
+        </aleph-flex>
         <aleph-dropdown
           placeholder="select an audio device"
           .items=${this.audioDevices}

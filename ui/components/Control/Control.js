@@ -50,9 +50,9 @@ class Control extends LitElement {
     this.type = "";
     this.label = "";
     this.index = 0;
-    this.initialValue = 64;
+    this.initialValue = 50;
     this.minValue = 0;
-    this.maxValue = 127;
+    this.maxValue = 100;
     this.value = this.initialValue;
     this.isDraggable = false;
   }

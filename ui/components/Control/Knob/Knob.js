@@ -1,4 +1,5 @@
 import { html } from "lit";
+import { clamp } from "../../../../utils/browserUtils";
 
 import "../../Flex/Flex";
 import Control from "../Control";
@@ -13,10 +14,10 @@ class Knob extends Control {
   constructor() {
     super();
     this.type = "knob";
-    this.strokeWidth = 9;
-    this.height = 85;
-    this.width = 85;
-    this.value = 127;
+    this.strokeWidth = 8;
+    this.height = 75;
+    this.width = 75;
+    this.value = 50;
     this.label = this.createLabelText(this.type, this.index);
     this.callback = () => {};
     this.callbackArgs = [];
@@ -34,7 +35,11 @@ class Knob extends Control {
 
   updateValue(e) {
     if (this.isDraggable) {
-      this.value = this.map(e.offsetY, this.height - 1, 0, 0, 129);
+      this.value = clamp(
+        this.map(e.offsetY, this.height - 1, 0, 0, this.maxValue + 2),
+        0,
+        this.maxValue
+      );
       this.callback(this.value, ...this.callbackArgs);
       this.boundsCheck(e, [this.width, this.height]);
     }
