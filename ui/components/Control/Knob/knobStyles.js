@@ -1,11 +1,12 @@
 import { css } from "lit";
+import { hex2rgba } from "../../../../utils/browserUtils";
 
 import theme from "../../../globalStyles/theme";
 
 const knobStyles = css`
   .knob-background {
     fill: none;
-    stroke: ${theme.colors.darkGrey};
+    stroke: ${hex2rgba(theme.colors.black, 0.5)};
   }
 
   .knob-value {
@@ -14,8 +15,12 @@ const knobStyles = css`
     transform-origin: center;
   }
 
+  .dragging {
+    cursor: grabbing !important;
+  }
+
   svg:hover {
-    cursor: pointer;
+    cursor: grab;
   }
 `;
 

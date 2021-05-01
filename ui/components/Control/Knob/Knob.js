@@ -62,6 +62,7 @@ class Knob extends Control {
           @mousemove=${this.updateValue}
           @mousedown=${this.enableDrag}
           @mouseup=${this.disableDrag}
+          class=${this.isDraggable ? "dragging" : null}
         >
           <defs>
             <linearGradient id="gradient" x1="0%" y1="50%" x2="85%" y2="100%">

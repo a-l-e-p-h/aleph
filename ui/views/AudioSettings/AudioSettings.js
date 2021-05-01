@@ -108,12 +108,15 @@ class AudioSettings extends StoxyElement(LitElement) {
               `
           )}
         </aleph-flex>
-        <aleph-dropdown
-          placeholder="select an audio device"
-          .items=${this.audioDevices}
-          .callback=${this.audioDeviceCallback}
-          .selectedItem=${this.lastDevice}
-        ></aleph-dropdown>
+        <aleph-flex justify="center">
+          <aleph-dropdown
+            label="audio device"
+            placeholder="select an audio device"
+            .items=${this.audioDevices}
+            .callback=${this.audioDeviceCallback}
+            .selectedItem=${this.lastDevice}
+          ></aleph-dropdown>
+        </aleph-flex>
       </aleph-window>
     `;
   }

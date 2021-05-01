@@ -4,6 +4,10 @@ import theme from "../../globalStyles/theme";
 import { hex2rgba } from "../../../utils/browserUtils";
 
 const dropdownStyles = css`
+  label {
+    display: block;
+  }
+
   .dropdown-container {
     display: inline-block;
     width: var(--dropdown-width, 324px);
