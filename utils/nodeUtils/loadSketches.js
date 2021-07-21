@@ -6,13 +6,13 @@ const path = require("path");
  * 
  * @see stripFilePath if you need bare file namesas
  * 
- * @returns {Array} - array of file paths to where local sketches
+ * @returns {Array} - array of file paths to local sketches
  */
-const loadSketches = async () => {
+const loadSketches = async (subfolder) => {
   try {
-    const fileNames = await fs.readdir(path.resolve(__dirname, "../../sketches"));
+    const fileNames = await fs.readdir(path.resolve(__dirname, `../../sketches/${subfolder}`));
     return fileNames.map((fileName) =>
-      path.resolve(__dirname, "../../sketches", fileName)
+      path.resolve(__dirname, `../../sketches/${subfolder}`, fileName)
     );
   } catch (error) {
     console.error(error);

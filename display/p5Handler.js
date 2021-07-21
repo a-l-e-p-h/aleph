@@ -16,7 +16,7 @@ const p5Handler = (layerIndex) => {
         audio = audioFeatures;
       });
 
-      ipcRenderer.on("sketch-changed", (_, sketchUpdate) => {
+      ipcRenderer.on("p5-sketch-changed", (_, sketchUpdate) => {
         const { layer, layerIndex: updateLayer } = JSON.parse(sketchUpdate);
 
         if (updateLayer === layerIndex) {
@@ -37,9 +37,9 @@ const p5Handler = (layerIndex) => {
 
       ipcRenderer.send("request-sketches");
 
-      ipcRenderer.once("sketch-list", (_, sketchList) => {
+      ipcRenderer.once("sketch-list", (_, sketches) => {
         // import sketches
-        sketchList.forEach((sketch) => {
+        sketches.p5.forEach((sketch) => {
           const sketchName = path.basename(sketch);
           sketches[sketchName] = require(sketch);
         });

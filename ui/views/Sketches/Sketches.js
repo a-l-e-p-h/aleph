@@ -16,6 +16,7 @@ class SketchWindow extends StoxyElement(LitElement) {
   static get stoxyProperties() {
     return {
       key: "sketches",
+      init: true,
       state: {
         layers: [
           {
@@ -28,6 +29,7 @@ class SketchWindow extends StoxyElement(LitElement) {
             visibility: "visible",
             mixBlendMode: "normal",
             opacity: 100,
+            type: "p5",
           },
           {
             index: 1,
@@ -39,6 +41,7 @@ class SketchWindow extends StoxyElement(LitElement) {
             visibility: "visible",
             mixBlendMode: "normal",
             opacity: 100,
+            type: "p5",
           },
           {
             index: 2,
@@ -50,6 +53,19 @@ class SketchWindow extends StoxyElement(LitElement) {
             visibility: "visible",
             mixBlendMode: "normal",
             opacity: 100,
+            type: "three",
+          },
+          {
+            index: 3,
+            sketches: [],
+            selectedSketch: "",
+            isPlaying: true,
+            isMuted: false,
+            isSoloed: false,
+            visibility: "visible",
+            mixBlendMode: "normal",
+            opacity: 100,
+            type: "three",
           },
         ],
       },
@@ -80,11 +96,17 @@ class SketchWindow extends StoxyElement(LitElement) {
     // initialize layers and blend modes
     ipcRenderer.once("sketch-list", (e, sketches) => {
       update("sketches.layers", (layers) =>
-        layers.map((layer) => {
-          return {
-            ...layer,
-            sketches,
-          };
+        layers.map((layer, idx) => {
+          if (idx < 2) {
+            return {
+              ...layer,
+              sketches: sketches.p5,
+            };
+          } else
+            return {
+              ...layer,
+              sketches: sketches.three,
+            };
         })
       ).then(() => this.setupBlendModes());
     });
@@ -115,8 +137,10 @@ class SketchWindow extends StoxyElement(LitElement) {
       else {
         targetLayer.isPlaying = !targetLayer.isPlaying;
       }
+
+      console.log(`${targetLayer.type}-sketch-changed`, layers[layerIndex]);
       ipcRenderer.send(
-        "sketch-changed",
+        `${targetLayer.type}-sketch-changed`,
         JSON.stringify({ layer: layers[layerIndex], layerIndex })
       );
       return layers;
@@ -221,7 +245,7 @@ class SketchWindow extends StoxyElement(LitElement) {
             (layer) => html`
               <aleph-flex direction="column">
                 <div class="layer-container">
-                  <h3>layer ${layer.index + 1}</h3>
+                  <h3>layer ${layer.index + 1} (${layer.type})</h3>
                   <aleph-flex align="center">
                     <aleph-dropdown
                       label="blend mode"
