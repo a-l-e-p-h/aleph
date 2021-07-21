@@ -69,25 +69,24 @@ ipcMain.on("p5-sketch-changed", (event, sketchUpdate) => {
   }
 });
 
+ipcMain.on("three-sketch-changed", (event, sketchUpdate) => {
+  if (displayWindow) {
+    displayWindow.webContents.send("three-sketch-changed", sketchUpdate);
+  }
+});
+
 ipcMain.on("request-sketches", async () => {
   const p5Sketches = await loadSketches("p5");
   const threeSketches = await loadSketches("three");
-  sendToWindow(displayWindow, "sketch-list", { p5: p5Sketches, three: threeSketches });
-  sendToWindow(
-    editorWindow,
-    "sketch-list",
-    {
-      p5: p5Sketches.map((path) => stripFilePath(path)),
-      three: threeSketches.map((path) => stripFilePath(path))
-    }
-
-  );
+  sendToWindow(displayWindow, "sketch-list", {
+    p5: p5Sketches,
+    three: threeSketches,
+  });
+  sendToWindow(editorWindow, "sketch-list", {
+    p5: p5Sketches.map((path) => stripFilePath(path)),
+    three: threeSketches.map((path) => stripFilePath(path)),
+  });
 });
-
-ipcMain.on("request-three-sketches", async () => {
-  const sketches = await loadSketches("three");
-  sendToWindow(displayWindow, "three-sketch-list", sketches);
-})
 
 ipcMain.on("mix-blend-mode-updated", (event, layer) => {
   sendToWindow(displayWindow, "mix-blend-mode-updated", layer);
