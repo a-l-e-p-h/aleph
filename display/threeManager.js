@@ -48,19 +48,34 @@ class ThreeManager {
       const { layer, layerIndex: updateLayer } = JSON.parse(sketchUpdate);
 
       if (this.layer === updateLayer) {
-        this.selectScene(layer.selectedSketch);
+        const newSketch = this.sketches[layer.selectedSketch];
+
+        if (!layer.isPlaying) {
+          this.stop();
+          this.selectedSketch = null;
+          // todo update localstorage
+        } else if (this.selectedSketch !== newSketch) {
+          this.selectScene(layer.selectedSketch);
+          // todo update localstorage
+        }
       }
     });
   }
 
   selectScene(sceneName) {
     if (this.sketches[sceneName]) {
+      if (this.selectedSketch) this.stop();
       this.selectedSketch = new this.sketches[sceneName](
         this.renderer,
         this.camera
       );
       this.render();
     }
+  }
+
+  stop() {
+    const scene = this.selectedSketch.scene;
+    scene.remove.apply(scene, scene.children);
   }
 
   render() {
