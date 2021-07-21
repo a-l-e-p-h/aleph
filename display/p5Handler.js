@@ -37,9 +37,9 @@ const p5Handler = (layerIndex) => {
 
       ipcRenderer.send("request-sketches");
 
-      ipcRenderer.once("sketch-list", (_, sketches) => {
+      ipcRenderer.once("sketch-list", (_, sketchList) => {
         // import sketches
-        sketches.p5.forEach((sketch) => {
+        sketchList.p5.forEach((sketch) => {
           const sketchName = path.basename(sketch);
           sketches[sketchName] = require(sketch);
         });

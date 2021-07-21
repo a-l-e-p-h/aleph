@@ -16,7 +16,7 @@ class SketchWindow extends StoxyElement(LitElement) {
   static get stoxyProperties() {
     return {
       key: "sketches",
-      init: true,
+      // init: true,
       state: {
         layers: [
           {
@@ -138,7 +138,6 @@ class SketchWindow extends StoxyElement(LitElement) {
         targetLayer.isPlaying = !targetLayer.isPlaying;
       }
 
-      console.log(`${targetLayer.type}-sketch-changed`, layers[layerIndex]);
       ipcRenderer.send(
         `${targetLayer.type}-sketch-changed`,
         JSON.stringify({ layer: layers[layerIndex], layerIndex })
