@@ -16,7 +16,7 @@ class SketchWindow extends StoxyElement(LitElement) {
   static get stoxyProperties() {
     return {
       key: "sketches",
-      // init: true,
+      init: true,
       state: {
         layers: [
           {
