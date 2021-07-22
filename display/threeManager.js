@@ -87,11 +87,11 @@ class ThreeManager {
 
   stop() {
     const scene = this.selectedSketch.scene;
-    scene.remove.apply(scene, scene.children);
+    if (scene) scene.remove.apply(scene, scene.children);
   }
 
   render() {
-    this.selectedSketch.draw(this.renderer, this.camera);
+    this.selectedSketch.draw();
   }
 
   updateCss(updateType, layerUpdate, currentLayer) {

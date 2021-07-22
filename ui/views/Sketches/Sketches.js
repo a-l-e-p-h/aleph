@@ -16,13 +16,13 @@ class SketchWindow extends StoxyElement(LitElement) {
   static get stoxyProperties() {
     return {
       key: "sketches",
-      init: true,
+      // init: true,
       state: {
         layers: [
           {
             index: 0,
             sketches: [],
-            selectedSketch: "",
+            selectedSketch: () => {},
             isPlaying: true,
             isMuted: false,
             isSoloed: false,
@@ -34,7 +34,7 @@ class SketchWindow extends StoxyElement(LitElement) {
           {
             index: 1,
             sketches: [],
-            selectedSketch: "",
+            selectedSketch: () => {},
             isPlaying: true,
             isMuted: false,
             isSoloed: false,
